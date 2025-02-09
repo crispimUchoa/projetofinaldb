@@ -2,10 +2,10 @@ from Medico import Medico
 from Usuario import Usuario
 
 class Consulta:
-    def __init__(self, id, paciente, medico, data, preco, descricoes, nota=0):
+    def __init__(self, id, id_paciente, id_medico, data, preco, descricoes, nota=0):
         self.id = id
-        self.paciente = paciente
-        self.medico = medico
+        self.id_paciente = id_paciente
+        self.id_medico = id_medico
         self.data = data
         self.preco = preco
         self.descricoes = descricoes

@@ -7,4 +7,4 @@ class Medico(Usuario):
         self.especializacao = especializacao
         self.avaliacao=avaliacao
         self.atende_plantao=atende_plantao
-        self.horarios = horarios
+        self.horarios = horarios 
