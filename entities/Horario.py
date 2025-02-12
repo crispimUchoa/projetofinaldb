@@ -1,4 +1,4 @@
 class Horario:
-    def __init__(self, id_medico, horario):
-        self.id_medico = id_medico
+    def __init__(self, medico, horario):
+        self.medico = medico
         self.horario = horario

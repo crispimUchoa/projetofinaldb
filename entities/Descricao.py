@@ -1,4 +1,4 @@
 class Descricao:
-    def __init__(self, id_consulta, descricao):
-        self.id_consulta = id_consulta
+    def __init__(self, consulta, descricao):
+        self.consulta = consulta
         self.descricao = descricao

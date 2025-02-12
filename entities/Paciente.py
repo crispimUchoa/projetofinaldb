@@ -1,4 +1,4 @@
-from Usuario import Usuario
+from entities.Usuario import Usuario
 
 class Paciente(Usuario):
     def __init__(self, id, nome, senha, email, plano_de_saude, necessidade_especial, telefone):

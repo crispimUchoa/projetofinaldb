@@ -1,5 +1,5 @@
 class Prescricao:
-    def __init__(self, id_consulta, nome_composto_medicamento, observacao='') -> None:
-        self.id_consulta = id_consulta
+    def __init__(self, consulta, nome_composto_medicamento, observacao='') -> None:
+        self.consulta = consulta
         self.nome_composto_medicamento = nome_composto_medicamento
         self.observacao = observacao
