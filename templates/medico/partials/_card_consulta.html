@@ -1,4 +1,5 @@
-<div class="card-consulta">
+<a href="{{ url_for('medico_consulta', id_consulta=consulta.id) }}" class="card-consulta">
     <span class="consulta-id-paciente">{{consulta.id_paciente}}</span>
+    <span class="consulta-descricoes">{{consulta.descricoes}}</span>
     <span class="consulta-data">{{consulta.data}}</span>
-</div>
+</a>
