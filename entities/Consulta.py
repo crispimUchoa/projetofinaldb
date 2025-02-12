@@ -1,5 +1,3 @@
-from Medico import Medico
-from Usuario import Usuario
 
 class Consulta:
     def __init__(self, id, id_paciente, id_medico, data, preco, descricoes, nota=0):
