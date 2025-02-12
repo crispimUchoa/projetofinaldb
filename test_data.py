@@ -1,4 +1,5 @@
 from entities.Consulta import Consulta
+from entities.Medicamento import Medicamento
 from entities.Paciente import Paciente
 from entities.Medico import Medico
 
@@ -40,4 +41,17 @@ consultas = [
     Consulta(8, pacientes[7], medicos[7], "2025-03-07", 275.60, "Consulta oftalmológica", 4),
     Consulta(9, pacientes[8], medicos[8], "2025-03-10", 290.80, "Consulta neurológica", 5),
     Consulta(10, pacientes[9], medicos[9], "2025-03-15", 210.50, "Consulta psiquiátrica", 4),
+]
+
+medicamentos = [
+    Medicamento("Paracetamol", "Laboratório A"),
+    Medicamento("Ibuprofeno", "Laboratório B"),
+    Medicamento("Amoxicilina", "Laboratório C"),
+    Medicamento("Dipirona", "Laboratório D"),
+    Medicamento("Omeprazol", "Laboratório E"),
+    Medicamento("Losartana", "Laboratório F"),
+    Medicamento("Loratadina", "Laboratório G"),
+    Medicamento("Metformina", "Laboratório H"),
+    Medicamento("Azitromicina", "Laboratório I"),
+    Medicamento("Fluoxetina", "Laboratório J")
 ]
