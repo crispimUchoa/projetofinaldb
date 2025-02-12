@@ -1,4 +1,4 @@
-from Usuario import Usuario
+from entities.Usuario import Usuario
 
 
 class Medico(Usuario):
