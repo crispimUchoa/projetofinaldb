@@ -1,0 +1,15 @@
+{% extends '/base/index.html' %}
+{% block body %}
+<div class="login-div">
+    <h1 id="sistema-h1">Sistema Clínico</h1>
+    <h2 id="login-h2">Login</h2>
+    <form action="/" method="post" name="login-form" id="login-form" class="login-form">
+        <label for="email-input">Email:</label>
+        <input type="email" name="email-input" id="email-input" required> <br> <br>
+        <label for="password-input">Senha:</label>
+        <input type="password" name="password-input" id="password-input" required> <br> <br>
+        <button type="submit">Entrar</button>
+    </form>
+    <a href="{{ url_for('cadastro') }}">Não tem uma conta? Cadastre-se aqui</a>
+</div>
+{% endblock %}
