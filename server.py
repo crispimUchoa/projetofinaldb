@@ -11,8 +11,12 @@ def home():
             return paciente_home()
     return render_template("login.html")
 
-@app.route("/cadastro")
+@app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
+
+    if request.method == 'POST':
+        print(request.form)
+
     return render_template("cadastro.html")
 
 @app.route("/paciente_home")
