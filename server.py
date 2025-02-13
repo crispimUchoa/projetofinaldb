@@ -13,10 +13,11 @@ def home():
 
 @app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
-
+    import services
     if request.method == 'POST':
-        print(request.form)
-
+        form = request.form
+        user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'
+        print(user_existe)
     return render_template("cadastro.html")
 
 @app.route("/paciente_home")

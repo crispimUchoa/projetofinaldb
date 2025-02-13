@@ -17,16 +17,16 @@ pacientes = [
 ]
 
 medicos = [
-    Medico(1, "Dr. Carlos Silva", "senha1", "dr.carlos@exemplo.com", "Cardiologia", ["08:00-12:00", "14:00-18:00"], 5, True),
-    Medico(2, "Dra. Maria Oliveira", "senha2", "dra.maria@exemplo.com", "Pediatria", ["09:00-13:00", "15:00-19:00"], 7, False),
-    Medico(3, "Dr. João Souza", "senha3", "dr.joao@exemplo.com", "Neurologia", ["07:00-11:00", "13:00-17:00"], 2, True),
-    Medico(4, "Dra. Fernanda Costa", "senha4", "dra.fernanda@exemplo.com", "Ginecologia", ["08:00-12:00", "16:00-20:00"], 8, True),
-    Medico(5, "Dr. Rafael Lima", "senha5", "dr.rafael@exemplo.com", "Ortopedia", ["10:00-14:00", "15:00-19:00"], 3, False),
-    Medico(6, "Dra. Ana Pires", "senha6", "dra.ana@exemplo.com", "Dermatologia", ["08:00-12:00", "14:00-18:00"], 9, True),
-    Medico(7, "Dr. Lucas Almeida", "senha7", "dr.lucas@exemplo.com", "Oftalmologia", ["09:00-13:00", "15:00-19:00"], 6, False),
-    Medico(8, "Dra. Camila Rocha", "senha8", "dra.camila@exemplo.com", "Psiquiatria", ["08:00-12:00", "14:00-18:00"], 4, True),
-    Medico(9, "Dr. Roberto Lima", "senha9", "dr.roberto@exemplo.com", "Urologia", ["07:00-11:00", "13:00-17:00"], 5, False),
-    Medico(10, "Dra. Paula Martins", "senha10", "dra.paula@exemplo.com", "Endocrinologia", ["08:00-12:00", "15:00-19:00"], 7, True)
+    Medico(11, "Dr. Carlos Silva", "senha1", "dr.carlos@exemplo.com", "Cardiologia", ["08:00-12:00", "14:00-18:00"], 5, True),
+    Medico(12, "Dra. Maria Oliveira", "senha2", "dra.maria@exemplo.com", "Pediatria", ["09:00-13:00", "15:00-19:00"], 7, False),
+    Medico(13, "Dr. João Souza", "senha3", "dr.joao@exemplo.com", "Neurologia", ["07:00-11:00", "13:00-17:00"], 2, True),
+    Medico(14, "Dra. Fernanda Costa", "senha4", "dra.fernanda@exemplo.com", "Ginecologia", ["08:00-12:00", "16:00-20:00"], 8, True),
+    Medico(15, "Dr. Rafael Lima", "senha5", "dr.rafael@exemplo.com", "Ortopedia", ["10:00-14:00", "15:00-19:00"], 3, False),
+    Medico(16, "Dra. Ana Pires", "senha6", "dra.ana@exemplo.com", "Dermatologia", ["08:00-12:00", "14:00-18:00"], 9, True),
+    Medico(17, "Dr. Lucas Almeida", "senha7", "dr.lucas@exemplo.com", "Oftalmologia", ["09:00-13:00", "15:00-19:00"], 6, False),
+    Medico(18, "Dra. Camila Rocha", "senha8", "dra.camila@exemplo.com", "Psiquiatria", ["08:00-12:00", "14:00-18:00"], 4, True),
+    Medico(19, "Dr. Roberto Lima", "senha9", "dr.roberto@exemplo.com", "Urologia", ["07:00-11:00", "13:00-17:00"], 5, False),
+    Medico(20, "Dra. Paula Martins", "senha10", "dra.paula@exemplo.com", "Endocrinologia", ["08:00-12:00", "15:00-19:00"], 7, True)
 ]
 
 
@@ -42,6 +42,8 @@ consultas = [
     Consulta(9, pacientes[8], medicos[8], "2025-03-10", 290.80, "Consulta neurológica", 5),
     Consulta(10, pacientes[9], medicos[9], "2025-03-15", 210.50, "Consulta psiquiátrica", 4),
 ]
+
+users = [*pacientes, *medicos]
 
 medicamentos = [
     Medicamento("Paracetamol", "Laboratório A"),
