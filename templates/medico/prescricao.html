@@ -1,6 +1,7 @@
 {% block body %}
 <h1>Prescrição para {{consulta.paciente.nome}}</h1>
 <form >
+    <label for="input-pesquisa-med">Busque um medicamento</label>
     {% if request.args.get('q') %}
     <input type="text" name="q" id='input-pesquisa-med' value="{{request.args.get('q')}}">
     {% else %}
@@ -15,7 +16,10 @@
                 <label for="{{medicamento.nome_do_composto}}">{{medicamento.nome_do_composto}}</label>
             </div>
         {% endfor %}
-    <textarea name="observacao"></textarea>
+        <br>
+    <label for="observacoes-text-area">Observações</label> <br>
+    <textarea name="observacao" id="observacoes-text-area" placeholder='ex: 3 vezes por dia, 8 em 8 horas...'></textarea>
+    <br>
     <button type="submit">Prescrever</button>
 </form>  
 {% endblock %}
