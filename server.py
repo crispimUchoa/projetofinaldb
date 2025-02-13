@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from test_data import consultas
+import test_data
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
@@ -24,14 +24,31 @@ def paciente_home():
 @app.route('/medico/home')
 def medico_home():
 
-    return render_template('medico/home.html', consultas=consultas)
+    return render_template('medico/home.html', consultas=test_data.consultas)
 
 @app.route('/medico/consulta/<int:id_consulta>')
 def medico_consulta(id_consulta):
     
-    consulta = list(filter(lambda cons: cons.id == id_consulta, consultas))
+    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
     if consulta:
         consulta = consulta[0]
     return render_template('medico/consulta.html', consulta=consulta)
+
+@app.route('/medico/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
+def criar_prescricao(id_consulta):
+    q = request.args.get('q').lower() if request.args.get('q') else ''
+    
+    medicamentos = filter(lambda med: q in med.nome_do_composto.lower() ,test_data.medicamentos)
+
+    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
+    if consulta:
+        consulta = consulta[0]
+
+    if request.method == 'POST':
+        from entities.Prescricao import Prescricao
+        print(request.form)
+        
+    return render_template('medico/prescricao.html', consulta=consulta, medicamentos=medicamentos)
+
 if __name__ == "__main__":
     app.run(debug=True)

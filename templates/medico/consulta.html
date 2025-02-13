@@ -1,9 +1,10 @@
 {% block body %}
-<h1>Suas consulta</h1>
+<h1>Detalhes da consulta</h1>
 <div class="detalhes-consulta">
-    <span>{{consulta.paciente.nome}}</span>
-    <span>{{consulta.descricoes}}</span>
-    <span>{{consulta.nota}}</span>
-    <span>{{consulta.data}}</span>
+    <h3>Paciente: {{consulta.paciente.nome}}</h3>
+    <p>{{consulta.descricoes}}</p>
+    <h5>{{consulta.nota}}</h5>
+    <h5>{{consulta.data}}</h5>
+    <button class='btn fazer-prescricao-btn'>Fazer prescrição</button>
 </div>  
 {% endblock %}
