@@ -1,0 +1,26 @@
+{% extends "base/index.html" %}
+{% block body %}
+<h1>Prescrição para {{consulta.paciente.nome}}</h1>
+<form id='form-pesquisa-med'>
+    <label for="input-pesquisa-med">Busque um medicamento</label>
+    {% if request.args.get('q') %}
+    <input type="text" name="q" id='input-pesquisa-med' value="{{request.args.get('q')}}" autofocus>
+    {% else %}
+    <input type="text" name="q" id='input-pesquisa-med' value="" autofocus>
+    {% endif %}
+    <button type="submit">pesquisar</button>
+</form>
+<form action="{{ url_for('criar_prescricao', id_consulta=consulta.id) }}" method='POST' class="detalhes-prescricao">
+        {% for medicamento in medicamentos %}
+            <div>
+                <input type="radio" name="medicamento" id="{{medicamento.nome_do_composto}}" value="{{medicamento.nome_do_composto}}">
+                <label for="{{medicamento.nome_do_composto}}">{{medicamento.nome_do_composto}}</label>
+            </div>
+        {% endfor %}
+        <br>
+    <label for="observacoes-text-area">Observações</label> <br>
+    <textarea name="observacao" id="observacoes-text-area" placeholder='ex: 3 vezes por dia, 8 em 8 horas...'></textarea>
+    <br>
+    <button type="submit">Prescrever</button>
+</form>  
+{% endblock %}

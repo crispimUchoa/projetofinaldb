@@ -1,8 +1,9 @@
+{% extends "base/index.html" %}
 {% block body %}
 <h1>Suas consultas</h1>
-<div class="secao-de-consultas">
+<ul class="secao-de-consultas">
     {% for consulta in consultas %}
-        {% include "medico/partials/_card_consulta.html" %}
+        <li class='btn card-consulta-btn' >{% include "medico/partials/_card_consulta.html" %}</li>
     {% endfor %}
-</div>
+</ul>
 {% endblock %}
