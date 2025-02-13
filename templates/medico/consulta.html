@@ -6,6 +6,6 @@
     <p>{{consulta.descricoes}}</p>
     <h5>{{consulta.nota}}</h5>
     <h5>{{consulta.data}}</h5>
-    <button class='btn fazer-prescricao-btn'>Fazer prescrição</button>
+    <a href="{{ url_for('criar_prescricao', id_consulta = consulta.id) }}" class='btn fazer-prescricao-btn'>Fazer prescrição</a>
 </div>  
 {% endblock %}
