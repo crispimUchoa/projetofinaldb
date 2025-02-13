@@ -1,9 +1,9 @@
 {% extends '/base/index.html' %}
 {% block body %}
-<div class="login-div">
-    <h1 id="sistema-h1">Sistema Clínico</h1>
-    <h2 id="login-h2">Cadastro</h2>
-    <form action="{{ url_for('cadastro')}}" method="post" name="cadastro-login-form" id="login-form" class="login-form">
+<div class="register-login-div">
+    <form action="{{ url_for('cadastro')}}" method="post" name="cadastro-login-form" id="login-form" class="register-login-form">
+        <h1 id="sistema-h1">Sistema Clínico</h1>
+        <h2 id="login-h2">Cadastro</h2>
         <div class="form-group">
             <label for="name-input">Nome:</label>
             <input type="text" name="nome" id="name-input" required>
