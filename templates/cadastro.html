@@ -4,36 +4,36 @@
     <form action="{{ url_for('cadastro')}}" method="post" name="cadastro-login-form" id="login-form" class="register-login-form">
         <h1 id="sistema-h1">Sistema Clínico</h1>
         <h2 id="login-h2">Cadastro</h2>
-        <div class="form-group">
-            <label for="name-input">Nome:</label>
-            <input type="text" name="nome" id="name-input" required>
-        </div>
-        <div class="form-group">
-            <label for="email-input">Email:</label>
-            <input type="email" name="email" id="email-input" required>
-        </div>
-        <div class="form-group">
-            <label for="phone-input">Telefone:</label>
-            <input type="text" name="telefone" id="phone-input" required>
-        </div>
-        <div class="form-group">
-            <label for="password-input">Senha:</label>
-            <input type="password" name="senha" id="password-input" required>
-        </div>
-        <div class="form-group">
-            <label for="password-con-input">Confirme a senha:</label>
-            <input type="password" name="confirmacao_senha" id="password-con-input" required>
-        </div>
-        <div class="form-group">
-            <label for="heatlh-input">Plano de saúde:</label>
-            <input type="text" name="plano_de_saude" id="health-input">
-        </div>
-        <div class="form-group">
-            <label for="need-input">Necessidade especial:</label>
-            <input type="text" name="necessidade_especial" id="need-input" >
-        </div>
-        <button type="submit">Registar</button>
+        
+            <!-- <label for="name-input">Nome:</label> -->
+            <input placeholder="Nome" class='register-login-input' type="text" name="nome" id="name-input" required>
+        
+        
+            <!-- <label for="email-input">Email:</label> -->
+            <input placeholder="E-mail" class='register-login-input' type="email" name="email" id="email-input" required>
+        
+        
+            <!-- <label for="phone-input">Telefone:</label> -->
+            <input placeholder="Telefone" class='register-login-input' type="text" name="telefone" id="phone-input" required>
+        
+        
+            <!-- <label for="password-input">Senha:</label> -->
+            <input placeholder="Senha" class='register-login-input' type="password" name="senha" id="password-input" required>
+        
+        
+            <!-- <label for="password-con-input">Confirme a senha:</label> -->
+            <input placeholder="Confirmação de senha" class='register-login-input' type="password" name="confirmacao_senha" id="password-con-input" required>
+        
+        
+            <!-- <label for="heatlh-input">Plano de saúde:</label> -->
+            <input placeholder="Plano de saúde" class='register-login-input' type="text" name="plano_de_saude" id="health-input">
+        
+        
+            <!-- <label for="need-input">Necessidade especial:</label> -->
+            <input placeholder="Necessidade especial" class='register-login-input' type="text" name="necessidade_especial" id="need-input" >
+        
+        <button class="btn register-btn" type="submit">Registar</button>
+        <a class="register-login-redirect" href="{{ url_for('home') }}">Já tem uma conta? Entre aqui</a> 
     </form>
-    <a href="{{ url_for('home') }}">Já tem uma conta? Entre aqui</a> 
 </div>
 {% endblock %}

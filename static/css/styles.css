@@ -1,9 +1,21 @@
+
+
 * {
     padding: 0;
     margin: 0;
     font-family: sans-serif, monospace
 }
 
+:root{
+    --primary-color: #F8FAFC;
+    --secundary-color: #D9EAFD;
+    --light-blue: #BCCCDC;
+    --dark-blue: #9AA6B2;
+}
+
+body{
+    
+}
 
 button {
     padding: 0.25rem;
@@ -15,7 +27,23 @@ input {
 
 .main{
 }
-.register-login-div{
+
+.btn{ /* classe que define a aparência geral dos botões */
+    padding: 0.75rem;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    background-color: var(--light-blue);
+    &:hover{
+        transition: 0.3s;
+        color: var(--primary-color);
+        background-color: var(--dark-blue);
+    }
+}
+
+.register-login-div{ /* div que engloba toda a tela de login-cadastro */
+    background-color: var(--secundary-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -23,18 +51,52 @@ input {
     align-items: center;
 }
 
-.register-login-form{
+.register-login-form{ /* div que consiste o formulario de cadastro-login */
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 3rem;
-    border: 2px solid aqua;
-    border-radius: 6px;
+    gap: 1.3rem;
+    padding: 1.5rem 3rem;
+    background-color: var(--primary-color);
+    width: 21rem;
+    text-align: center;
+    border-radius: 2px;
+    box-shadow: 5px 5px 15px 5px var(--light-blue);
 }
 
-.form-group{
+
+
+.form-group{    /* div que organiza par label-input, atualmente não utilizada */
     display: flex;
     flex-direction: column;
+}
+
+.register-login-input{ /* classe que estiliza os inputs na tela de login-cadastro */
+    background-color: transparent;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 2px solid var(--light-blue);
+
+    &::placeholder{
+        color: var(--dark-blue);
+    }
+    &:focus{
+        outline: none;
+    }
+}
+
+
+
+.register-login-redirect{ /* classe do link: já tem uma conta? Entre aqui */
+    text-decoration: none;
+    border: 0px solid var(--dark-blue);
+    &:visited{
+        color: inherit;
+    }
+    &:hover{
+        transition: 0.3s;
+        color: var(--dark-blue);
+        text-decoration: underline;
+    }
 }
 /* body {
     min-height: 100vh;
