@@ -1,14 +1,21 @@
 from flask import Flask, render_template, request
 import test_data
 app = Flask(__name__)
+app.secret_key = "secret key"
 
+#Rotas de formulário
 @app.route("/", methods=['GET', 'POST'])
-def home():
+def login():
+    import services
     if request.method == 'POST':
         email = request.form['email-input']
         password = request.form['password-input']
-        if email == "1@1" and password == "2":
-            return paciente_home()
+        user_type = services.checa_usuario(email, password)
+        if user_type:
+            if user_type == "medico":
+                return medico_home()
+            elif user_type == "paciente":
+                return paciente_home()
     return render_template("login.html")
 
 @app.route("/cadastro", methods=['GET', 'POST'])
@@ -20,10 +27,14 @@ def cadastro():
         print(user_existe)
     return render_template("cadastro.html")
 
-@app.route("/paciente_home")
+#Rotas do paciente
+@app.route("/paciente_home", methods=['GET', 'POST'])
 def paciente_home():
-    return render_template("paciente_home.html")
+    return render_template("/paciente/home.html", consultas=test_data.consultas)
 
+@app.route("/paciente/consulta")
+def paciente_consulta():
+    return render_template("paciente/consulta.html")
 
 #Rotas do medico
 @app.route('/medico/home')

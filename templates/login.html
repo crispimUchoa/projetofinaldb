@@ -1,15 +1,13 @@
 {% extends '/base/index.html' %}
 {% block body %}
-<div class="login-div">
-    <h1 id="sistema-h1">Sistema Clínico</h1>
-    <h2 id="login-h2">Login</h2>
-    <form action="/" method="post" name="login-form" id="login-form" class="login-form">
-        <label for="email-input">Email:</label>
-        <input type="email" name="email-input" id="email-input" required> <br> <br>
-        <label for="password-input">Senha:</label>
-        <input type="password" name="password-input" id="password-input" required> <br> <br>
-        <button type="submit">Entrar</button>
+<div class="register-login-div">
+    <form action="{{ url_for('login') }}" method="post" name="login-form" id="login-form" class="register-login-form">
+        <h1 id="sistema-h1">Sistema Clínico</h1>
+        <h2 id="login-h2">Login</h2>
+        <input placeholder="E-mail" class="register-login-input" type="email" name="email-input" id="email-input" required> <br> <br>
+        <input placeholder="Senha" class="register-login-input" type="password" name="password-input" id="password-input" required> <br> <br>
+        <button class="btn register-btn" type="submit">Entrar</button>
+        <a class="register-login-redirect" href="{{ url_for('cadastro') }}">Não tem uma conta? Cadastre-se aqui</a>
     </form>
-    <a href="{{ url_for('cadastro') }}">Não tem uma conta? Cadastre-se aqui</a>
 </div>
 {% endblock %}
