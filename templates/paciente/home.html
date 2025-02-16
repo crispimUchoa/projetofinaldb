@@ -1,9 +1,20 @@
-{% extends '/base/index.html' %}
+{% extends "base/index.html" %}
 {% block body %}
-<h1>Suas consultas</h1>
-<ul class="secao-de-consultas">
-    {% for consulta in consultas %}
-        <li class='btn card-consulta-btn' >{% include "paciente/partials/card_consulta.html" %}</li>
-    {% endfor %}
-</ul>
-{% endblock %} 
+<section class='content'>
+        <h1>Suas consultas</h1>
+    <ul class="secao-de-consultas">
+        <li class="li header-consulta-li ">  
+            <span class="consulta-paciente">Paciente</span>
+            <span class="consulta-descricoes">Descrição(s)</span>
+            <span class="consulta-medico">Médico</span>
+            <span class="consulta-data">Data</span>
+
+        </li>
+        {% for consulta in consultas %}
+        <a href="{{ url_for('paciente_consulta', id_consulta=consulta.id) }}" class="card-consulta-btn"> 
+            <li class='li card-consulta-li' >{% include "paciente/partials/card_consulta.html" %}</li>
+            </a>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}
