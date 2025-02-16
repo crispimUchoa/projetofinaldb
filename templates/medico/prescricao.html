@@ -24,7 +24,7 @@
     <label for="observacoes-text-area">Observações</label> <br>
     <textarea name="observacao" id="observacoes-text-area" placeholder='ex: 3 vezes por dia, 8 em 8 horas...'></textarea>
     <br>
-    <div class="botoes">
+    <div class="botoes presc-form">
         <button type="submit" class='btn'>Prescrever</button>
         <a href="{{ url_for('medico_consulta', id_consulta = consulta.id) }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
     </div>

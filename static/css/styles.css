@@ -160,6 +160,7 @@ input {
 .botoes{
     display: flex;
     gap: 1rem;
+
 }
 
 .link-btn{
@@ -211,6 +212,11 @@ input {
     overflow-y: scroll;
     height: 15rem;
     width: 100%;
+}
+
+.presc-form{
+    justify-content: center;
+    align-items: center;
 }
 
 .login-div {
