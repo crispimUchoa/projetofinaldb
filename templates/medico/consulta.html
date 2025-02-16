@@ -1,11 +1,19 @@
 {% extends "base/index.html" %}
 {% block body %}
-<h1>Detalhes da consulta</h1>
-<div class="detalhes-consulta">
-    <h3>Paciente: {{consulta.paciente.nome}}</h3>
-    <p>{{consulta.descricoes}}</p>
-    <h5>{{consulta.nota}}</h5>
-    <h5>{{consulta.data}}</h5>
-    <a href="{{ url_for('criar_prescricao', id_consulta = consulta.id) }}" class='btn fazer-prescricao-btn'>Fazer prescrição</a>
-</div>  
+<section class="content">
+    <h1>Detalhes da consulta</h1>
+    <div class="detalhes-consulta">
+
+        <h3 class='consulta-detalhe nome-paciente'>Paciente: {{consulta.paciente.nome}}</h3>
+        <p class='consulta-detalhe descricao'>{{consulta.descricoes}}</p>
+        <h5 class='consulta-detalhe nota' >{{consulta.nota}}</h5>
+        <h5 class='consulta-detalhe data'>{{consulta.data}}</h5>
+        <h3>Prescrições</h5>
+            <p class='consulta-detalhe prescricoes' >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odio nemo similique esse aliquam explicabo. Sit ex voluptates itaque cumque tempore impedit excepturi inventore animi laborum modi alias iure adipisci voluptas, porro ullam saepe. Nobis voluptates incidunt, voluptatibus neque eum maxime repellat perferendis laboriosam! Repellat illo laborum itaque ipsam soluta consequuntur.</p>
+        <div class="botoes">
+            <a href="{{ url_for('criar_prescricao', id_consulta = consulta.id) }}" class='link-btn fazer-prescricao-btn'>Fazer prescrição</a>
+            <a href="{{ url_for('medico_home') }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
+        </div>
+    </div>  
+</section>
 {% endblock %}
