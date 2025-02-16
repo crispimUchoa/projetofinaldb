@@ -1,5 +1,4 @@
 
-
 * {
     padding: 0;
     margin: 0;
@@ -14,7 +13,7 @@
 }
 
 body{
-    
+    background-color: var(--primary-color);
 }
 
 button {
@@ -25,7 +24,51 @@ input {
     text-align: start;
 }
 
-.main{
+.navbar{
+    background-color: var(--light-blue);
+    height: 4rem;
+}
+.secao-consultas{
+    padding: 1rem 10rem;
+}
+.secao-de-consultas{ 
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    box-shadow: -1px 0px 20px 1px var(--secundary-color);
+    list-style: none;
+    gap: 1rem;
+}
+
+.header-consulta-li{
+    display: flex;
+    padding: 1rem 1.25rem;
+    /* border-bottom: 2px solid var(--light-blue); */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card-consulta-li{
+    display: flex;
+    background-color: var(--light-blue);
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    &:hover{
+        transition: 0.3s;
+        color: var(--primary-color);
+        background-color: var(--dark-blue);
+    }
+}
+.li span{
+    width: 100%;
+}
+
+.card-consulta-btn{
+    text-decoration: none;
+    &:visited{
+        color: inherit;
+    }
 }
 
 .btn{ /* classe que define a aparência geral dos botões */
