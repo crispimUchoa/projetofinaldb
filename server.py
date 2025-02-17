@@ -61,9 +61,15 @@ def medico_perfil():
     medico = test_data.medicos[0]
     return render_template('medico/perfil.html', medico=medico)
 
-@app.route('/medico/alterar_horarios')
+@app.route('/medico/alterar_horarios', methods=['GET', 'POST'])
 def alterar_horarios():
-    return render_template('medico/alterar_horarios.html')
+    medico = test_data.medicos[0]
+    todos_horarios = [f'{str(n).zfill(2)}:00-{str(n+4).zfill(2)}:00' for n in range(8, 18)]
+
+    if request.method=='POST':
+        print(request.form)
+
+    return render_template('medico/alterar_horarios.html', medico=medico, todos_horarios=todos_horarios)
 
 if __name__ == "__main__":
     app.run(debug=True)
