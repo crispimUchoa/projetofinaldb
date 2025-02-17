@@ -112,10 +112,10 @@ input {
 
 
 
-.form-group{    /* div que organiza par label-input, atualmente não utilizada */
+/* .form-group{    
     display: flex;
     flex-direction: column;
-}
+} */
 
 .register-login-input{ /* classe que estiliza os inputs na tela de login-cadastro */
     background-color: transparent;
@@ -197,17 +197,18 @@ input {
     gap: 1rem;
     box-shadow: 1px 1px 30px 2px var(--light-blue);
     background-color: var(--primary-color);
-    width: fit-content;
+    width: 40rem;
     padding: 2rem;
     margin: 1rem auto;
     border-radius: 2px;
 }
 
 .form-pesquisa-med, .form-prescricao{
-    width: 20rem;
+    width: 80%;
     padding: 1rem 2rem 0;
     display: flex;
     flex-direction: column;
+    
 }
 .input-pesquisa{
     width: 100%;
@@ -223,6 +224,10 @@ input {
     overflow-y: scroll;
     height: 15rem;
     width: 100%;
+}
+
+textarea{
+    resize: none ;
 }
 
 .presc-form{
@@ -242,6 +247,25 @@ input {
     background-color: var(--primary-color);
 }
 
+.alterar-horarios-form{
+    background-color: var(--primary-color);
+    padding: 2rem;
+    border-radius: 2px;
+    margin: 0 auto;
+    width: 40rem;
+    box-shadow: -1px 0px 20px 1px var(--light-blue);
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;
+    
+}
+
+.horarios-list{
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+}
 
 .login-div {
     padding: 2rem;
