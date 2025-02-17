@@ -25,7 +25,7 @@ input {
 }
 
 .navbar{
-    background-color: var(--light-blue);
+    background-color: var(--dark-blue);
     height: 4rem;
 }
 .content{
