@@ -14,7 +14,10 @@
             <label for="{{horario.strip}}">{{horario}}</label><br>
             
         {% endfor %}
-        <button type="submit" class='btn'>Salvar</button>
+        <div class="botoes">
+            <button type="submit" class='btn'>Salvar</button>
+            <a href="{{ url_for('medico_perfil') }}" class='link-btn'>Voltar</a>
+        </div>
     </form>
 </section>
 

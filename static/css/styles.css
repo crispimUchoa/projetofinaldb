@@ -66,6 +66,7 @@ input {
 
 .card-consulta-btn{
     text-decoration: none;
+    
     &:visited{
         color: inherit;
     }
@@ -75,6 +76,7 @@ input {
     padding: 1rem 2rem;
     font-weight: 500;
     font-size: 15px;
+    border-radius: 3px;
     border: none;
     cursor: pointer;
     background-color: var(--light-blue);
