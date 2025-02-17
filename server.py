@@ -71,6 +71,7 @@ def medico_consulta(id_consulta):
         consulta = consulta[0]
     return render_template('medico/consulta.html', consulta=consulta)
 
+#Rot
 @app.route('/medico/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
 def criar_prescricao(id_consulta):
     q = request.args.get('q').lower() if request.args.get('q') else ''
@@ -86,6 +87,21 @@ def criar_prescricao(id_consulta):
         print(request.form)
         
     return render_template('medico/prescricao.html', consulta=consulta, medicamentos=medicamentos)
+
+@app.route('/medico/perfil')
+def medico_perfil():
+    medico = test_data.medicos[0]
+    return render_template('medico/perfil.html', medico=medico)
+
+@app.route('/medico/alterar_horarios', methods=['GET', 'POST'])
+def alterar_horarios():
+    medico = test_data.medicos[0]
+    todos_horarios = [f'{str(n).zfill(2)}:00-{str(n+4).zfill(2)}:00' for n in range(8, 18)]
+
+    if request.method=='POST':
+        print(request.form)
+
+    return render_template('medico/alterar_horarios.html', medico=medico, todos_horarios=todos_horarios)
 
 if __name__ == "__main__":
     app.run(debug=True)
