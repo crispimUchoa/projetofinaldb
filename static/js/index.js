@@ -49,3 +49,5 @@ const stars = document.querySelectorAll(".stars i");
         })
         .catch(error => console.error("Erro:", error));
     }
+
+document.getElementById("marcar-consulta-date").min = new Date().toISOString().slice(0, 16);

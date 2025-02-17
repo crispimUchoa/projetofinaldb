@@ -57,6 +57,17 @@ def avaliar_medico(id_medico):
     # Se for GET, renderiza a página normalmente
     return render_template("paciente/avaliar_medico.html", medico=medico)
 
+@app.route('/paciente/lista_medicos')
+def lista_medicos():
+    return render_template("paciente/lista_medicos.html", medicos=test_data.medicos)
+
+@app.route('/paciente/marcar_consulta/<int:id_medico>')
+def marcar_consulta(id_medico):
+    medico = list(filter(lambda cons: cons.id == id_medico, test_data.medicos))
+    if medico:
+        medico = medico[0]
+    return render_template("paciente/marcar_consulta.html", medico=medico)
+
 #Rotas do medico
 @app.route('/medico/home')
 def medico_home():

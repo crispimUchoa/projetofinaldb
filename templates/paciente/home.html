@@ -4,17 +4,18 @@
         <h1>Suas consultas</h1>
     <ul class="secao-de-consultas">
         <li class="li header-consulta-li ">  
-            <span class="consulta-paciente">Paciente</span>
+            <span class="consulta-paciente">Médico</span>
             <span class="consulta-descricoes">Descrição(s)</span>
-            <span class="consulta-medico">Médico</span>
             <span class="consulta-data">Data</span>
-
         </li>
         {% for consulta in consultas %}
         <a href="{{ url_for('paciente_consulta', id_consulta=consulta.id) }}" class="card-consulta-btn"> 
             <li class='li card-consulta-li' >{% include "paciente/partials/card_consulta.html" %}</li>
             </a>
         {% endfor %}
+        <div class="botoes">
+            <a class="link-btn" href="{{ url_for('lista_medicos') }}">Marcar Nova Consulta</a>
+        </div>
     </ul>
 </section>
 {% endblock %}

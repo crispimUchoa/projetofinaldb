@@ -324,3 +324,22 @@ textarea{
         background-color: var(--dark-blue);
     }
 }
+
+.marcar-consulta-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    padding: 1.5rem 3rem;
+    background-color: var(--primary-color);
+    width: 21rem;
+    text-align: center;
+    border-radius: 2px;
+    box-shadow: 5px 5px 15px 5px var(--light-blue);
+}
+
+.marcar-consulta-section {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 90vh;
+}
