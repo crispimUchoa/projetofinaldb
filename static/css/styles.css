@@ -13,7 +13,7 @@
 }
 
 body{
-    background-color: var(--primary-color);
+    background-color: var(--secundary-color);
 }
 
 button {
@@ -35,8 +35,10 @@ input {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    padding: 1rem 1.5rem;
-    box-shadow: -1px 0px 20px 1px var(--secundary-color);
+    padding: 1rem 2rem;
+    border-radius: 2px;
+    box-shadow: -1px 0px 20px 1px var(--light-blue);
+    background-color: var(--primary-color);
     list-style: none;
     gap: 1rem;
 }
@@ -153,11 +155,13 @@ input {
 /* TELA DE CONSULTA UNICA */
 .detalhes-consulta{
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 2rem;
+    border-radius: 2px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     box-shadow: 1px 1px 30px 2px var(--light-blue);
+    background-color: var(--primary-color);
 }
 .botoes{
     display: flex;
@@ -190,8 +194,13 @@ input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 4rem);
     gap: 1rem;
+    box-shadow: 1px 1px 30px 2px var(--light-blue);
+    background-color: var(--primary-color);
+    width: fit-content;
+    padding: 2rem;
+    margin: 1rem auto;
+    border-radius: 2px;
 }
 
 .form-pesquisa-med, .form-prescricao{
@@ -210,7 +219,7 @@ input {
 }
 
 .meds-lista{
-    height: 10rem;
+    height: 8rem;
     overflow-y: scroll;
     height: 15rem;
     width: 100%;
@@ -222,10 +231,17 @@ input {
 }
 
 .detalhes-medico{
+    padding: 2rem;
+    border-radius: 2px;
+    box-shadow: -1px 0px 20px 1px var(--light-blue);
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 4.5rem;
+    width: 40rem;
+    margin: 0 auto;
+    background-color: var(--primary-color);
 }
+
 
 .login-div {
     padding: 2rem;
