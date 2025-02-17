@@ -39,6 +39,7 @@ def medico_consulta(id_consulta):
         consulta = consulta[0]
     return render_template('medico/consulta.html', consulta=consulta)
 
+#Rot
 @app.route('/medico/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
 def criar_prescricao(id_consulta):
     q = request.args.get('q').lower() if request.args.get('q') else ''
@@ -54,6 +55,15 @@ def criar_prescricao(id_consulta):
         print(request.form)
         
     return render_template('medico/prescricao.html', consulta=consulta, medicamentos=medicamentos)
+
+@app.route('/medico/perfil')
+def medico_perfil():
+    medico = test_data.medicos[0]
+    return render_template('medico/perfil.html', medico=medico)
+
+@app.route('/medico/alterar_horarios')
+def alterar_horarios():
+    return render_template('medico/alterar_horarios.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

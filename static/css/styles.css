@@ -219,6 +219,12 @@ input {
     align-items: center;
 }
 
+.detalhes-medico{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .login-div {
     padding: 2rem;
     margin: auto;
