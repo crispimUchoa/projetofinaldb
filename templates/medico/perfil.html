@@ -18,8 +18,8 @@
         {% endif %}
         <h3>Sua nota: {{medico.avaliacao}}</h3>
         <div class="botoes">
-            <a href="{{ url_for('alterar_horarios') }}" class='link-btn fazer-prescricao-btn'>Alterar horários</a>
-            <a href="{{ url_for('medico_home') }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
+            <a href="{{ url_for('medico.alterar_horarios') }}" class='link-btn fazer-prescricao-btn'>Alterar horários</a>
+            <a href="{{ url_for('medico.home') }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
         </div>
     </div>
 </section>

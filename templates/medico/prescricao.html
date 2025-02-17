@@ -11,7 +11,7 @@
     {% endif %}
     <!---- <button type="submit">pesquisar</button> -->
 </form>
-<form action="{{ url_for('criar_prescricao', id_consulta=consulta.id) }}" method='POST' class="form form-prescricao">
+<form action="{{ url_for('medico.criar_prescricao', id_consulta=consulta.id) }}" method='POST' class="form form-prescricao">
         <div class="meds-lista">
             {% for medicamento in medicamentos %}
             <div>
@@ -26,7 +26,7 @@
     <br>
     <div class="botoes presc-form">
         <button type="submit" class='btn'>Prescrever</button>
-        <a href="{{ url_for('medico_consulta', id_consulta = consulta.id) }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
+        <a href="{{ url_for('medico.consulta', id_consulta = consulta.id) }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
     </div>
 </section>
 </form>  
