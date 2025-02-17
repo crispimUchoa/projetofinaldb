@@ -1,0 +1,24 @@
+{% extends "base/index.html" %}
+{% block body %}
+<section class="content">
+    <form action='{{url_for("alterar_horarios")}}' method='POST' class="alterar-horarios">
+        <h1>Horários disponíveis</h1>
+        {% for horario in todos_horarios %}
+        
+            {% if horario in medico.horarios %}
+                <input type="checkbox" name="alterar_horarios" id="{{horario}}" value={{horario}} checked>
+            
+            {% else %}
+                <input type="checkbox" name="alterar_horarios" id="{{horario}}">
+            {% endif %}
+            <label for="{{horario.strip}}">{{horario}}</label><br>
+            
+        {% endfor %}
+        <div class="botoes">
+            <button type="submit" class='btn'>Salvar</button>
+            <a href="{{ url_for('medico_perfil') }}" class='link-btn'>Voltar</a>
+        </div>
+    </form>
+</section>
+
+{% endblock body %}

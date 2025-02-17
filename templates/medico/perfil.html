@@ -1,0 +1,27 @@
+{% extends "base/index.html" %}
+
+{% block body %}
+
+<section class="content">
+    <div class="detalhes-medico">
+        <h1>{{medico.nome}}</h1>
+        <h3>Especialização {{medico.especializacao}}</h3>
+        <h3>Horários:
+            {% for horario in medico.horarios %}
+            ({{horario}})
+            {% endfor %}
+        </h3>
+        {% if medico.atende_plantao %}
+        <h3>Atende plantão</h3>
+        {% else %}
+        <h3>Não atende plantão</h3>
+        {% endif %}
+        <h3>Sua nota: {{medico.avaliacao}}</h3>
+        <div class="botoes">
+            <a href="{{ url_for('alterar_horarios') }}" class='link-btn fazer-prescricao-btn'>Alterar horários</a>
+            <a href="{{ url_for('medico_home') }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}
