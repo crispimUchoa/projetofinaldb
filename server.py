@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import test_data
+from queries import conn, AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
 app = Flask(__name__)
 
 #Rotas de formulário

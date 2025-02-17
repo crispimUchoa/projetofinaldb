@@ -1,31 +1,40 @@
 import psycopg2
-from psycopg2 import connect
+from db import railway
 
-dbname='railway'
-password = 'dLZGjVutNkAFzasklAeLSqrUaPMrmeKq'
-user = 'postgres'
-host = 'switchback.proxy.rlwy.net'
-port = '41846'
-
-conn = connect(dbname=dbname, user=user, host=host, password=password, port=port)
-crsr = conn.cursor()
 def AVGMedicoConsultas(medico):
-	crsr.execute('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT NULL GROUP BY ID_Medico_Consulta')
-	return crsr.fetchone()
-
+    conn = railway.connection()
+    crsr = conn.cursor()
+    crsr.execute('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT NULL GROUP BY ID_Medico_Consulta')
+    crsr.fetchone()
+    conn.commit()
+    tabela_resultado = crsr.fetchone()
+    crsr.close()
+    conn.close()
+    return tabela_resultado    
+    
 def BuscarMedicos(medico):
-	crsr.execute('SELECT (M.Nome, H.Id_horario, M.Especialização, M.Nota) FROM MEDICO M JOIN HORARIOS H ON M.Id_medico = H.Id_medico JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
-	return crsr.fetchall()
+
+    conn = railway.connection()
+    crsr = conn.cursor()
+    crsr.execute('SELECT (M.Nome, H.Id_horario, M.Especialização, M.Nota) FROM MEDICO M JOIN HORARIOS H ON M.Id_medico = H.Id_medico JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
+    tabela_resultado = crsr.fetchone()
+    crsr.close()
+    conn.close()
+    return tabela_resultado
+    
 
 def cadastrar_paciente(nome, email, senha, data_nascimento, cpf, telefone, endereco):
     try:
+        conn = railway.connection()
+        crsr1 = conn.cursor()
+        crsr2 = conn.cursor()
         query_usuario = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (%s, %s, %s, 'paciente') RETURNING id;"
-        crsr.execute(query_usuario, (nome, email, senha))
-        usuario_id = crsr.fetchone()
+        crsr1.execute(query_usuario, (nome, email, senha))
+        usuario_id = crsr1.fetchone()
 
         query_paciente = "INSERT INTO pacientes (usuario_id, data_nascimento, cpf, telefone, endereco) VALUES (%s, %s, %s, %s, %s);"
         valores_paciente = (usuario_id, data_nascimento, cpf, telefone, endereco)
-        crsr.execute(query_paciente, valores_paciente)
+        crsr2.execute(query_paciente, valores_paciente)
 
         conn.commit()
         print("Paciente cadastrado com sucesso!")
@@ -35,10 +44,13 @@ def cadastrar_paciente(nome, email, senha, data_nascimento, cpf, telefone, ender
         print("Erro ao cadastrar paciente:", e)
 
     finally:
-        crsr.close()
+        crsr1.close()
+        crsr2.close()
         conn.close()
 
 def mostrarConsultasPaciente(id_paciente):
+    conn = railway.connection()
+    crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
         FROM CONSULTA C
@@ -49,9 +61,14 @@ def mostrarConsultasPaciente(id_paciente):
         JOIN DESCRICAO D ON C.Id_consulta = D.Id_consulta
         WHERE P.Id_paciente = %s
     ''', (id_paciente,))
-    return crsr.fetchall()
+    tabela_resultado = crsr.fetchall()
+    crsr.close()
+    conn.close()
+    return tabela_resultado    
 
 def mostrarConsultasMedico(id_medico):
+    conn = railway.connection()
+    crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
         FROM CONSULTA C
@@ -62,4 +79,7 @@ def mostrarConsultasMedico(id_medico):
         JOIN DESCRICAO D ON C.Id_consulta = D.Id_consulta
         WHERE M.Id_medico = %s
     ''', (id_medico,))
-    return crsr.fetchall()
+    tabela_resultado = crsr.fetchall()
+    crsr.close()
+    conn.close()
+    return tabela_resultado    
