@@ -1,0 +1,18 @@
+{% extends "base/index.html" %}
+{% block body %}
+<section class="content">
+    <h1>Médicos Disponíveis</h1>
+    <ul class="secao-de-consultas">
+        <li class="li header-consulta-li ">  
+            <span class="consulta-paciente">Nome</span>
+            <span class="consulta-descricoes">Especialização</span>
+            <span class="consulta-data">Horários De Atendimento</span>
+        </li>
+        {% for medico in medicos %}
+        <a href="{{ url_for('marcar_consulta', id_medico=medico.id) }}" class="card-consulta-btn"> 
+            <li class='li card-consulta-li'>{% include "paciente/partials/card_medico.html" %}</li>
+        </a>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

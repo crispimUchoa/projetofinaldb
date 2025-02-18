@@ -1,0 +1,23 @@
+{% extends "base/index.html" %}
+{% block body %}
+<section class="content">
+    <h1>Detalhes do médico</h1>
+    <div class="detalhes-consulta">
+        <h3>Nome: {{medico.nome}}</h3>
+        <h3>Especialização: {{medico.especializacao}}</h3>
+        <h3>Nota: {{medico.avaliacao}}</h3>
+        <h3>Avalie este médico:</h3>
+        <div class="stars">
+            <i class="fas fa-star" data-value="1"></i>
+            <i class="fas fa-star" data-value="2"></i>
+            <i class="fas fa-star" data-value="3"></i>
+            <i class="fas fa-star" data-value="4"></i>
+            <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <div class="botoes">
+            <button class="btn-avaliar" onclick="enviarAvaliacao()">Enviar Avaliação</button>
+        </div>
+        <input type="hidden" id="rating" value="0">
+    </div>
+</section>
+{% endblock %}
