@@ -11,7 +11,7 @@
 
         </li>
         {% for consulta in consultas %}
-        <a href="{{ url_for('medico_consulta', id_consulta=consulta.id) }}" class="card-consulta-btn"> 
+        <a href="{{ url_for('medico.consulta', id_consulta=consulta.id) }}" class="card-consulta-btn"> 
             <li class='li card-consulta-li' >{% include "medico/partials/_card_consulta.html" %}</li>
             </a>
         {% endfor %}

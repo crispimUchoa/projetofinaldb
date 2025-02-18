@@ -1,7 +1,7 @@
 {% extends "base/index.html" %}
 {% block body %}
 <section class="content">
-    <form action='{{url_for("alterar_horarios")}}' method='POST' class="alterar-horarios-form">
+    <form action='{{url_for("medico.alterar_horarios")}}' method='POST' class="alterar-horarios-form">
         <h1>Horários disponíveis</h1>
         <ul class="horarios-list">
             {% for horario in todos_horarios %}
@@ -18,7 +18,7 @@
         </ul>
         <div class="botoes">
             <button type="submit" class='btn'>Salvar</button>
-            <a href="{{ url_for('medico_perfil') }}" class='link-btn'>Voltar</a>
+            <a href="{{ url_for('medico.perfil') }}" class='link-btn'>Voltar</a>
         </div>
     </form>
 </section>
