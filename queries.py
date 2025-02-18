@@ -3,26 +3,7 @@ from db import db
 from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
-
-dbname='flask_db'
-password = 'Chtehe112327!'
-user = 'postgres'
-host = 'localhost'
-port = '5432'
-
-def AVGMedicoConsultas(id_medico):
-    conn = db.connection()
-    crsr = conn.cursor()
-    query_avg = ('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT AND ID_Medico = %s NULL GROUP BY ID_Medico_Consulta')
-    crsr.execute(query_avg, (id_medico,))
-    crsr.fetchone()
-    conn.commit()
-    tabela_resultado = crsr.fetchone()
-    crsr.close()
-    conn.close()
-    return tabela_resultado    
-<<<<<<< HEAD
-=======
+from entities.Consulta import Consulta
 
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
@@ -259,9 +240,80 @@ def obterClasseMedico(id_medico):
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
 def atualizarNotaConsulta(id_consulta, nota):
-    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
+    conn = db.connection()
     crsr = conn.cursor()
     query_busca = ('UPDATE consulta SET nota = %s WHERE id = %s')
     crsr.execute(query_busca, (nota, id_consulta))
-    crsr.close()
+    conn.commit()
     conn.close()
+
+def mostrarConsultasMedico(id_medico):
+    conn = db.connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT c.id, U.Nome, c.data, D.Descricao, C.Preco 
+        FROM CONSULTA C
+        JOIN MEDICO M ON C.Id_medico = M.Id
+        JOIN PACIENTE P ON C.Id_paciente = P.Id
+        JOIN Usuario U ON P.Id = U.ID
+        JOIN DESCRICAO D ON C.Id = D.Id_consulta
+        WHERE M.id = %s
+    ''', (id_medico,))
+    result = cursor.fetchall()
+    print(result)
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT (u.nome) FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
+    medico = cursor.fetchone()[0]
+    cursor.close()
+    consultas = list()
+    for id, paciente, data, descricao, preco in result:
+        consulta = Consulta(id, paciente, medico, data, preco, descricao)
+        consultas.append(consulta)
+
+    conn.close()
+    return consultas
+
+def mostrarConsultasPaciente(id_paciente):
+    conn = db.connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT c.id, U.Nome, c.data, D.Descricao, C.Preco 
+        FROM CONSULTA C
+        JOIN MEDICO M ON C.Id_medico = M.Id
+        JOIN PACIENTE P ON C.Id_paciente = P.Id
+        JOIN Usuario U ON M.Id = U.ID
+        JOIN DESCRICAO D ON C.Id = D.Id_consulta
+        WHERE P.id = %s
+    ''', (id_paciente,))
+    result = cursor.fetchall()
+    print(result)
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT (u.nome) FROM paciente p INNER JOIN usuario u ON u.id=p.id WHERE p.id=%s', (id_paciente,))
+    paciente = cursor.fetchone()[0]
+    cursor.close()
+    consultas = list()
+    for id, medico, data, descricao, preco in result:
+        print(medico)
+        consulta = Consulta(id, paciente, medico, data, preco, descricao)
+        consultas.append(consulta)
+    conn.close()
+    return consultas
+
+def procuraUsuario(email, password):
+    conn = db.connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT u.id, u.nome, u.email, u.senha, p.plano_de_saude, p.data_de_nascimento, p.necessidade_especial, p.telefone FROM usuario u JOIN paciente p ON u.id = p.id WHERE u.email = %s AND u.senha = %s', (email, password))
+    usuario = cursor.fetchone()
+    if usuario is None:
+        cursor.execute('SELECT u.id, u.nome, u.email, u.senha, m.especializacao, m.avaliacao, m.atende_plantao FROM usuario u JOIN medico m ON u.id = m.id WHERE u.email = %s AND u.senha = %s', (email, password))
+        usuario = cursor.fetchone()
+        if usuario is None:
+            return None
+        else:
+            id, nome, senha, email, especializacao, avaliacao, atende_plantao = usuario
+            return Medico(id, nome, senha, email, especializacao, avaliacao, atende_plantao)
+    else:
+        id, nome, senha, email, plano_de_saude, data_de_nascimento, necessidade_especial, telefone = usuario
+        return Paciente(id, nome, senha, email, plano_de_saude, necessidade_especial, telefone)

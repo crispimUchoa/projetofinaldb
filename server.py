@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import test_data
+import queries
 
 # from queries import conn, AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
 
@@ -8,6 +9,7 @@ from routes.medico import medico
 
 
 app = Flask(__name__)
+app.secret_key = "secret_key"
 
 app.register_blueprint(paciente, url_prefix='/paciente')
 app.register_blueprint(medico, url_prefix='/medico')
@@ -15,16 +17,16 @@ app.register_blueprint(medico, url_prefix='/medico')
 #Rotas de formulário
 @app.route("/", methods=['GET', 'POST'])
 def login():
-    import services
     if request.method == 'POST':
         email = request.form['email-input']
         password = request.form['password-input']
-        user_type = services.checa_usuario(email, password)
-        if user_type:
-            if user_type == "medico":
-                return redirect(url_for('medico.home'))
-            elif user_type == "paciente":
-                return redirect(url_for('paciente.home'))
+        user = queries.procuraUsuario(email, password)
+        if user.__class__.__name__ == "Medico":
+            session['user_id'] = user.id
+            return redirect(url_for('medico.home'))
+        elif user.__class__.__name__ == "Paciente":
+            session['user_id'] = user.id
+            return redirect(url_for('paciente.home'))
     return render_template("login.html")
 
 @app.route("/cadastro", methods=['GET', 'POST'])

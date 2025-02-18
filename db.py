@@ -12,4 +12,4 @@ class DB():
         conn = connect(dbname=self.dbname,password=self.password,user=self.user,host=self.host,port=self.port)
         return conn
     
-db = DB('railway', 'dLZGjVutNkAFzasklAeLSqrUaPMrmeKq', 'postgres', 'switchback.proxy.rlwy.net', '41846')
+db = DB('flask_db', 'Chtehe112327!', 'postgres', 'localhost', '5432')
