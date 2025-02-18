@@ -1,11 +1,16 @@
-from flask import Flask, render_template, request, jsonify, Blueprint
+from flask import Flask, render_template, request, Blueprint, session
 import test_data
+import queries
+
+
 
 paciente = Blueprint('paciente', __name__)
 
 @paciente.route("/home", methods=['GET', 'POST'])
 def home():
-    return render_template("/paciente/home.html", consultas=test_data.consultas)
+    user_id = session['user_id']
+    consultas = queries.mostrarConsultasPaciente(user_id)
+    return render_template("/paciente/home.html", consultas=consultas)
 
 @paciente.route("/consulta/<int:id_consulta>")
 def consulta(id_consulta):
@@ -16,12 +21,12 @@ def consulta(id_consulta):
 
 @paciente.route("/avaliar_consulta/<int:id_consulta>", methods=["GET", "POST"])
 def avaliar_consulta(id_consulta):
-    consulta = next((cons for cons in test_data.consultas if cons.id == id_consulta), None)
+    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
+    if consulta:
+        consulta = consulta[0]
     if request.method == "POST":
         nota = request.form['rating']
-        print(nota)
-        # medico.avaliacoes.append(int(nota))
-        # medico.avaliacao = sum(medico.avaliacoes) / len(medico.avaliacoes)
+        queries.atualizarNotaConsulta(id_consulta, nota)
     return render_template("paciente/avaliar_consulta.html", consulta=consulta)
 
 @paciente.route('/lista_medicos')
