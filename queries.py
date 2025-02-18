@@ -4,6 +4,7 @@ from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
 
+
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
     crsr = conn.cursor()
@@ -15,6 +16,19 @@ def AVGMedicoConsultas(id_medico):
     crsr.close()
     conn.close()
     return tabela_resultado    
+
+def AVGMedicoConsultas(id_medico):
+    conn = db.connection()
+    crsr = conn.cursor()
+    query_avg = ('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT AND ID_Medico = %s NULL GROUP BY ID_Medico_Consulta')
+    crsr.execute(query_avg, (id_medico,))
+    crsr.fetchone()
+    conn.commit()
+    tabela_resultado = crsr.fetchone()
+    crsr.close()
+    conn.close()
+    return tabela_resultado    
+
     
 def BuscarMedicos():
 
@@ -152,6 +166,7 @@ def mostrarMedicoLog(email, senha):
     conn.close()
     return tabela_resultado
 
+
 def mostarHorarios(medico):
     conn = db.connection()
     crsr = conn.cursor()
@@ -212,23 +227,38 @@ def obterClasseMedico(id_medico):
     id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = crsr.fetchone()
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
-"""
-    SELECT:
-    -medico que email e senha sejam iguais aos logados *
-    -todos os horarios em que horarios.id_medico = medico.id -
-    -todas as consultas que consulta.id_medico = medico.id 
-    -a consulta em que consulta.id = consulta.id_consulta -
-    -todas as prescrições em que prescricao.id_consulta = id_consulta *
+# <<<<<<< HEAD
+# """
+#     SELECT:
+#     -medico que email e senha sejam iguais aos logados *
+#     -todos os horarios em que horarios.id_medico = medico.id *
+#     -todas as consultas que consulta.id_medico = medico.id *
+#     -a consulta em que consulta.id = consulta.id_consulta *
+#     -todas as prescrições em que prescricao.id_consulta = id_consulta *
 
-    INSERT:
-    -insere medico cadastrado no banco
-    -insere nova prescricao -
-    -insere novo horario
+#     INSERT:
+#     -insere medico cadastrado no banco *
+#     -insere nova prescricao *
+#     -insere novo horario
 
-    DELETE:
-    -deleta horario removido *
+# """
+#     SELECT:
+#     -medico que email e senha sejam iguais aos logados *
+#     -todos os horarios em que horarios.id_medico = medico.id -
+#     -todas as consultas que consulta.id_medico = medico.id 
+#     -a consulta em que consulta.id = consulta.id_consulta -
+#     -todas as prescrições em que prescricao.id_consulta = id_consulta *
+
+#     INSERT:
+#     -insere medico cadastrado no banco
+#     -insere nova prescricao -
+#     -insere novo horario
+# >>>>>>> d7cfa63b56e0545e6823142bf373c00d6c27be70
+
+#     DELETE:
+#     -deleta horario removido *
     
-    Funções:
-    -Obter_Paciente *
-    -Obter_Medico *
-"""
+#     Funções:
+#     -Obter_Paciente *
+#     -Obter_Medico *
+# """
