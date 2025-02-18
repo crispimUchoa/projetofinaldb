@@ -24,6 +24,9 @@ def login():
 @app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
     import services
+    
+    user = request.remote_user
+    print('NOW HE ',user)
     if request.method == 'POST':
         form = request.form
         user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'
