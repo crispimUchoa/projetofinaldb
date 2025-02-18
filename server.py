@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request
 import test_data
 
-from routes.medico import medico
+from routes import *
+
 app = Flask(__name__)
 
 app.register_blueprint(medico, url_prefix='/medico')
