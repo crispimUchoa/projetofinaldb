@@ -1,14 +1,14 @@
 import psycopg2
-from db import railway
+from db import db
 from entities.Medico import Medico
-import entities.Horario
+from entities.Horario import Horario
 from entities.Paciente import Paciente
 
-def AVGMedicoConsultas(Medico):
-    conn = railway.connection()
+def AVGMedicoConsultas(id_medico):
+    conn = db.connection()
     crsr = conn.cursor()
     query_avg = ('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT AND ID_Medico = %s NULL GROUP BY ID_Medico_Consulta')
-    crsr.execute(query_avg, (Medico.id,))
+    crsr.execute(query_avg, (id_medico,))
     crsr.fetchone()
     conn.commit()
     tabela_resultado = crsr.fetchone()
@@ -18,26 +18,37 @@ def AVGMedicoConsultas(Medico):
     
 def BuscarMedicos():
 
-    conn = railway.connection()
-    crsr = conn.cursor()
-    crsr.execute('SELECT (M.Nome, H.Id_horario, M.Especialização, M.Nota) FROM MEDICO M JOIN HORARIOS H ON M.Id_medico = H.Id_medico JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
-    tabela_resultado = crsr.fetchone()
-    crsr.close()
-    conn.close()
-    return tabela_resultado
-    
+    conn = db.connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT (M.Id_medico, U.Nome, M.Especializacao, M.Avaliacao) FROM MEDICO M INNER JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
+    result_medicos = cursor.fetchall()
+    medicos = list()
+    cursor.close()
+    for id, nome, especializacao, avaliacao in result_medicos:
+        horarios = []
+        cursor = conn.cursor()
+        cursor.execute(f'SELECT * FROM HORARIOS WHERE ID_MEDICO = {id}')
+        result_horarios = cursor.fetchall()
+        for id_medico, id_horario in result_horarios:
+            horario = Horario(id_medico, id_horario)
+            horarios.append(horario)
+            medico = Medico(id=id, nome=nome, especializacao=especializacao, horarios=horarios, avaliacao=avaliacao, horarios=horarios)
+            medicos.append(medico)
 
-def cadastrar_paciente(nome, email, senha, data_nascimento, cpf, telefone, endereco):
+    return medicos
+
+
+def cadastrar_paciente(nome, email, senha, data_nascimento, telefone):
     try:
-        conn = railway.connection()
+        conn = db.connection()
         crsr1 = conn.cursor()
         crsr2 = conn.cursor()
-        query_usuario = "INSERT INTO usuario (nome, email, senha, tipo) VALUES (%s, %s, %s, 'paciente') RETURNING id;"
+        query_usuario = "INSERT INTO usuario (nome, email, senha) VALUES (%s, %s, %s RETURNING id;"
         crsr1.execute(query_usuario, (nome, email, senha))
-        usuario_id = crsr1.fetchone()
+        paciente_id = crsr1.fetchone()[0]
 
-        query_paciente = "INSERT INTO paciente (usuario_id, data_nascimento, cpf, telefone, endereco) VALUES (%s, %s, %s, %s, %s);"
-        valores_paciente = (usuario_id, data_nascimento, cpf, telefone, endereco)
+        query_paciente = "INSERT INTO paciente (id_paciente, data_nascimento, telefone) VALUES (%s, %s, %s);"
+        valores_paciente = (paciente_id, data_nascimento,telefone)
         crsr2.execute(query_paciente, valores_paciente)
 
         conn.commit()
@@ -52,18 +63,18 @@ def cadastrar_paciente(nome, email, senha, data_nascimento, cpf, telefone, ender
         crsr2.close()
         conn.close()
 
-def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao=0, atende_plantao=True):
+def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao, atende_plantao):
     try:
-        conn = railway.connection()
+        conn = db.connection()
         crsr1 = conn.cursor()
         crsr2 = conn.cursor()
-        query_usuario = "INSERT INTO usuario (nome, email, senha, tipo) VALUES (%s, %s, %s, 'paciente') RETURNING id;"
+        query_usuario = "INSERT INTO usuario (nome, email, senha) VALUES (%s, %s, %s) RETURNING id_usuario;"
         crsr1.execute(query_usuario, (nome, email, senha))
-        usuario_id = crsr1.fetchone()
+        medico_id = crsr1.fetchone()[0]
 
-        query_paciente = "INSERT INTO medico (usuario_id, especializacao, horarios, avaliacao, atende_plantao) VALUES (%s, %s, %s, %s, %s);"
-        valores_paciente = (usuario_id, especializacao, horarios, avaliacao, atende_plantao)
-        crsr2.execute(query_paciente, valores_paciente)
+        query_medico = "INSERT INTO medico (id_medico, especializacao, horarios, avaliacao, atende_plantao) VALUES (%s, %s, %s, %s, %s);"
+        valores_medico = (medico_id, especializacao, horarios, avaliacao, atende_plantao)
+        crsr2.execute(query_medico, valores_medico)
 
         conn.commit()
         print("Medico cadastrado com sucesso!")
@@ -79,7 +90,7 @@ def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao=0, 
 
 def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
     try:
-        conn = railway.connection()
+        conn = db.connection()
         crsr = conn.cursor()
         query_usuario = "INSERT INTO prescricao (id_consulta, nome_composto_medicamento, observacao) VALUES (%s, %s, %s, %s);"
         crsr.execute(query_usuario, (id_consulta, nome_composto_medicamento, observacao))
@@ -96,7 +107,7 @@ def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
         conn.close()
 
 def mostrarConsultasPaciente(id_paciente):
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
@@ -104,7 +115,7 @@ def mostrarConsultasPaciente(id_paciente):
         JOIN MEDICO M ON C.Id_medico_consulta = M.Id_medico
         JOIN HORARIOS H ON M.Id_medico = H.Id_medico
         JOIN PACIENTE P ON C.Id_paciente_consulta = P.Id_paciente
-        JOIN Usuario U ON P.Id_paciente = U.ID_Usuario
+        JOIN Usuario U ON M.id_medico = U.ID_Usuario
         JOIN DESCRICAO D ON C.Id_consulta = D.Id_consulta
         WHERE P.Id_paciente = %s
     ''', (id_paciente,))
@@ -114,7 +125,7 @@ def mostrarConsultasPaciente(id_paciente):
     return tabela_resultado    
 
 def mostrarConsultasMedico(id_medico):
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
@@ -122,7 +133,7 @@ def mostrarConsultasMedico(id_medico):
         JOIN MEDICO M ON C.Id_medico_consulta = M.Id_medico
         JOIN HORARIOS H ON M.Id_medico = H.Id_medico
         JOIN PACIENTE P ON C.Id_paciente_consulta = P.Id_paciente
-        JOIN Usuario U ON M.Id_medico = U.ID_Usuario
+        JOIN Usuario U ON P.Id_paciente = U.ID_Usuario
         JOIN DESCRICAO D ON C.Id_consulta = D.Id_consulta
         WHERE M.Id_medico = %s
     ''', (id_medico,))
@@ -132,9 +143,9 @@ def mostrarConsultasMedico(id_medico):
     return tabela_resultado
 
 def mostrarMedicoLog(email, senha):
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
-    query_busca = ('SELECT * FROM MEDICO M JOIN USUARIO U WHERE M.Id_medico = U.Id_Usuario %s = U.email AND %s = U.senha')
+    query_busca = ('SELECT * FROM MEDICO M INNER JOIN USUARIO U ON M.Id_medico = U.Id_Usuario %s = U.email AND %s = U.senha')
     crsr.execute(query_busca, (email, senha))
     tabela_resultado = crsr.fetchone()
     crsr.close()
@@ -142,7 +153,7 @@ def mostrarMedicoLog(email, senha):
     return tabela_resultado
 
 def mostarHorarios(medico):
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM HORARIO H JOIN MEDICO M WHERE %s = H.Id_medico')
     crsr.execute(query_busca, (medico.id,))
@@ -153,7 +164,7 @@ def mostarHorarios(medico):
 
 def mostarConsulta(medico):
     medicoref = Medico(medico)
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM CONSLUTA C JOIN MEDICO M WHERE %s = C.Id_medico_consulta')
     crsr.execute(query_busca, (medicoref.id,))
@@ -163,7 +174,7 @@ def mostarConsulta(medico):
     return tabela_resultado
 
 def mostrarPrescricao(id_consulta):
-    conn = railway.connection()
+    conn = db.connection()
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM PRESCRICAO P WHERE %s = P.Id_consulta')
     crsr.execute(query_busca, (id_consulta,))
@@ -172,15 +183,12 @@ def mostrarPrescricao(id_consulta):
     conn.close()
     return tabela_resultado
 
-#Inacabados
-
-def removerHorario(Horario):
+def removerHorario(id_medico, horario):
     try:
-        id_horario = entities.Horario.horario
-        conn = railway.connection()
+        conn = db.connection()
         crsr = conn.cursor()
-        query_busca = ('DELETE * FROM HORARIO H WHERE %s = H.Id_horario')
-        crsr.execute(query_busca, (id_horario,))
+        query_busca = ('DELETE FROM HORARIO H WHERE %s = H.id_medico AND %s = H.horario')
+        crsr.execute(query_busca, (id_medico, horario))
     except psycopg2.Error as e:
         conn.rollback()
         print("Erro ao enviar prescricao:", e)
@@ -188,21 +196,21 @@ def removerHorario(Horario):
         crsr.close()
         conn.close()
 
-def obter_paciente(id_paciente):
-    conn = railway.connection()
+def obterClassePaciente(id_paciente):
+    conn = db.connection()
     crsr = conn.cursor()
-    query_busca = ('SELECT * FROM USUARIO U JOIN PACIENTE P WHERE WHERE U.Id_usuario = P.Id_paciente AND P.Id_paciente = %s')
+    query_busca = ('SELECT * FROM USUARIO U INNER JOIN PACIENTE P ON U.Id_usuario = P.Id_paciente AND P.Id_paciente = %s')
     crsr.execute(query_busca, id_paciente)
-    crsr.fetchall()
-    return
+    id, nome, senha, email, id_prov, plano_de_saude, data_nascimento, necessidade_especial, telefone = crsr.fetchone()
+    return Paciente(id, nome, senha, email, plano_de_saude, data_nascimento, necessidade_especial, telefone)
 
-def obter_medico(id_medico):
-    conn = railway.connection()
+def obterClasseMedico(id_medico):
+    conn = db.connection()
     crsr = conn.cursor()
-    query_busca = ('SELECT * FROM USUARIO U JOIN MEDICO M WHERE WHERE U.Id_usuario = P.Id_medico AND P.Id_medico = %s')
+    query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id_usuario = P.Id_medico AND P.Id_medico = %s')
     crsr.execute(query_busca, id_medico)
-    crsr.fetchall()
-    return
+    id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = crsr.fetchone()
+    return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
 """
     SELECT:
@@ -218,9 +226,9 @@ def obter_medico(id_medico):
     -insere novo horario
 
     DELETE:
-    -deleta horario removido
+    -deleta horario removido *
     
     Funções:
-    -Obter_Paciente
-    -Obter_Medico
+    -Obter_Paciente *
+    -Obter_Medico *
 """
