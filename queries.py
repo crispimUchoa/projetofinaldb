@@ -4,6 +4,15 @@ from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
 
+dbname='flask_db'
+password = 'Chtehe112327!'
+user = 'postgres'
+host = 'localhost'
+port = '5432'
+
+conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
+crsr = conn.cursor()
+
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
     crsr = conn.cursor()
@@ -16,26 +25,26 @@ def AVGMedicoConsultas(id_medico):
     conn.close()
     return tabela_resultado    
     
-def BuscarMedicos():
+# def BuscarMedicos():
 
-    conn = db.connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT (M.Id_medico, U.Nome, M.Especializacao, M.Avaliacao) FROM MEDICO M INNER JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
-    result_medicos = cursor.fetchall()
-    medicos = list()
-    cursor.close()
-    for id, nome, especializacao, avaliacao in result_medicos:
-        horarios = []
-        cursor = conn.cursor()
-        cursor.execute(f'SELECT * FROM HORARIOS WHERE ID_MEDICO = {id}')
-        result_horarios = cursor.fetchall()
-        for id_medico, id_horario in result_horarios:
-            horario = Horario(id_medico, id_horario)
-            horarios.append(horario)
-            medico = Medico(id=id, nome=nome, especializacao=especializacao, horarios=horarios, avaliacao=avaliacao, horarios=horarios)
-            medicos.append(medico)
+#     conn = db.connection()
+#     cursor = conn.cursor()
+#     cursor.execute('SELECT (M.Id_medico, U.Nome, M.Especializacao, M.Avaliacao) FROM MEDICO M INNER JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
+#     result_medicos = cursor.fetchall()
+#     medicos = list()
+#     cursor.close()
+#     for id, nome, especializacao, avaliacao in result_medicos:
+#         horarios = []
+#         cursor = conn.cursor()
+#         cursor.execute(f'SELECT * FROM HORARIOS WHERE ID_MEDICO = {id}')
+#         result_horarios = cursor.fetchall()
+#         for id_medico, id_horario in result_horarios:
+#             horario = Horario(id_medico, id_horario)
+#             horarios.append(horario)
+#             medico = Medico(id=id, nome=nome, especializacao=especializacao, horarios=horarios, avaliacao=avaliacao, horarios=horarios)
+#             medicos.append(medico)
 
-    return medicos
+#     return medicos
 
 
 def cadastrar_paciente(nome, email, senha, data_nascimento, telefone):

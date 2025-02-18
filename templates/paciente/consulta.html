@@ -11,8 +11,8 @@
         <h3>Prescrições</h5>
             <p class='consulta-detalhe prescricoes' >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odio nemo similique esse aliquam explicabo. Sit ex voluptates itaque cumque tempore impedit excepturi inventore animi laborum modi alias iure adipisci voluptas, porro ullam saepe. Nobis voluptates incidunt, voluptatibus neque eum maxime repellat perferendis laboriosam! Repellat illo laborum itaque ipsam soluta consequuntur.</p>
         <div class="botoes">
-            <a href="{{ url_for('avaliar_medico', id_medico=consulta.medico.id) }}" class='link-btn avaliar-medico-btn'>Avaliar Médico</a>
-            <a href="{{ url_for('paciente_home') }}" class='link-btn avaliar-medico-btn'>Voltar</a>
+            <a href="{{ url_for('paciente.avaliar_consulta', id_consulta=consulta.id) }}" class='link-btn avaliar-medico-btn'>Avaliar Consulta</a>
+            <a href="{{ url_for('paciente.home') }}" class='link-btn avaliar-medico-btn'>Voltar</a>
         </div>
     </div>  
 </section>

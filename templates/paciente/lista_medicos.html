@@ -9,7 +9,7 @@
             <span class="consulta-data">Horários De Atendimento</span>
         </li>
         {% for medico in medicos %}
-        <a href="{{ url_for('marcar_consulta', id_medico=medico.id) }}" class="card-consulta-btn"> 
+        <a href="{{ url_for('paciente.marcar_consulta', id_medico=medico.id) }}" class="card-consulta-btn"> 
             <li class='li card-consulta-li'>{% include "paciente/partials/card_medico.html" %}</li>
         </a>
         {% endfor %}
