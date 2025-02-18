@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 import test_data
 
+from queries import conn, AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
+
 from routes.medico import medico
+
 app = Flask(__name__)
 
 app.register_blueprint(medico, url_prefix='/medico')
