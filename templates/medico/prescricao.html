@@ -15,7 +15,7 @@
         <div class="meds-lista">
             {% for medicamento in medicamentos %}
             <div>
-                <input type="radio" name="medicamento" id="{{medicamento.nome_do_composto}}" value="{{medicamento.nome_do_composto}}">
+                <input type="checkbox" name="medicamento" id="{{medicamento.nome_do_composto}}" value="{{medicamento.nome_do_composto}}">
                 <label for="{{medicamento.nome_do_composto}}">{{medicamento.nome_do_composto}}</label>
             </div>
         {% endfor %}

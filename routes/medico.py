@@ -13,9 +13,7 @@ def home():
 @medico.route('/consulta/<int:id_consulta>')
 def consulta(id_consulta):
     
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
+    consulta = queries.mostarConsulta(id_consulta)
     return render_template('medico/consulta.html', consulta=consulta)
 
 @medico.route('/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
@@ -24,13 +22,13 @@ def criar_prescricao(id_consulta):
     
     medicamentos = filter(lambda med: q in med.nome_do_composto.lower() ,test_data.medicamentos)
 
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
+    consulta = queries.mostarConsulta(3)
 
     if request.method == 'POST':
         from entities.Prescricao import Prescricao
-        print(request.form)
+        form = request.form
+        prescricao = {'medicamentos': form.getlist('medicamento'), 'obs': form.get('observacao')}
+        queries.adicionar_Prescricao(id_consulta, prescricao)
         
     return render_template('medico/prescricao.html', consulta=consulta, medicamentos=medicamentos)
 

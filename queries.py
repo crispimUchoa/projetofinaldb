@@ -4,6 +4,7 @@ from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
 from entities.Consulta import Consulta
+from entities.Prescricao import Prescricao
 
 
 def AVGMedicoConsultas(id_medico):
@@ -90,12 +91,19 @@ def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao, at
         cursor2.close()
         conn.close()
 
-def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
+def adicionar_Prescricao(id_consulta, prescricao):
+    medicamentos, obs = prescricao.values()
+    med_values = list()
+    for med in medicamentos:
+        med_values.append((id_consulta, med, obs))
+        
     try:
         conn = db.connection()
         cursor = conn.cursor()
-        query_usuario = "INSERT INTO prescricao (id_consulta, nome_composto_medicamento, observacao) VALUES (%s, %s, %s, %s);"
-        cursor.execute(query_usuario, (id_consulta, nome_composto_medicamento, observacao))
+        query_usuario = "INSERT INTO prescricao (id_consulta, composto_medicamento, observacao) VALUES (%s, %s, %s);" 
+        print(query_usuario)
+        print(med_values)
+        cursor.executemany(query_usuario, med_values)
 
         conn.commit()
         print("Prescricao escrita com sucesso!")
@@ -187,15 +195,41 @@ def mostarHorarios(id_medico):
     conn.close()
     return tabela_resultado
 
-def mostarConsulta(id_medico):
+def mostarConsulta(id_consulta):
     conn = db.connection()
     cursor = conn.cursor()
-    query_busca = ('SELECT * FROM CONSULTA WHERE id_medico_consulta = %s')
-    cursor.execute(query_busca, (id_medico,))
-    tabela_resultado = cursor.fetchall()
+    query_busca = ("""
+    SELECT c.id, c.data, c.preco, c.nota, um.nome, up.nome, d.descricao FROM consulta c 
+    INNER JOIN usuario um ON um.id = c.id_medico
+    INNER JOIN medico m ON m.id = um.id
+    INNER JOIN usuario up ON up.id = c.id_paciente
+    INNER JOIN paciente p ON p.id = up.id
+    INNER JOIN descricao d ON d.id_consulta=c.id
+    WHERE c.id= %s;
+    """)
+    cursor.execute(query_busca, (id_consulta,))
+    consulta_data = cursor.fetchone()
+    if not consulta_data:
+        return
+    id, data, preco, nota, medico, paciente, descricao = consulta_data
     cursor.close()
+
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM prescricao WHERE id_consulta = %s', (id_consulta,))
+    prescricoes_data = cursor.fetchall()
+    prescricoes = []
+    for p in prescricoes_data:
+        consulta, medicamento, obs = p
+        prescricao = Prescricao(consulta, medicamento, obs)
+        prescricoes.append(prescricao)
+        
+    consulta = Consulta(id, paciente, medico, data, preco, descricao, nota=nota if nota else 0,prescricoes=prescricoes)
+
+    
+
+
     conn.close()
-    return tabela_resultado
+    return consulta
 
 def mostrarPrescricao(id_consulta):
     conn = db.connection()
