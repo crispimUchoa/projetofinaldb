@@ -4,16 +4,16 @@ from entities.Paciente import Paciente
 from entities.Medico import Medico
 
 pacientes = [
-    Paciente(1, "Paciente 1", "senha1", "paciente1@exemplo.com", "Unimed", "Nenhuma", "(11) 912345678"),
-    Paciente(2, "Paciente 2", "senha2", "paciente2@exemplo.com", "Bradesco Saúde", "Deficiência auditiva", "(11) 923456789"),
-    Paciente(3, "Paciente 3", "senha3", "paciente3@exemplo.com", "Amil", "Nenhuma", "(11) 934567890"),
-    Paciente(4, "Paciente 4", "senha4", "paciente4@exemplo.com", "Hapvida", "Deficiência visual", "(11) 945678901"),
-    Paciente(5, "Paciente 5", "senha5", "paciente5@exemplo.com", "Unimed", "Mobilidade reduzida", "(11) 956789012"),
-    Paciente(6, "Paciente 6", "senha6", "paciente6@exemplo.com", "Bradesco Saúde", "Nenhuma", "(11) 967890123"),
-    Paciente(7, "Paciente 7", "senha7", "paciente7@exemplo.com", "Amil", "Deficiência auditiva", "(11) 978901234"),
-    Paciente(8, "Paciente 8", "senha8", "paciente8@exemplo.com", "Hapvida", "Mobilidade reduzida", "(11) 989012345"),
-    Paciente(9, "Paciente 9", "senha9", "paciente9@exemplo.com", "Unimed", "Nenhuma", "(11) 990123456"),
-    Paciente(10, "Paciente 10", "senha10", "paciente10@exemplo.com", "Bradesco Saúde", "Deficiência visual", "(11) 901234567"),
+    Paciente(1, "Paciente 1", "senha1", "paciente1@exemplo.com", "Unimed", "Nenhuma", "(11) 912345678", '9999-92-01'),
+    Paciente(2, "Paciente 2", "senha2", "paciente2@exemplo.com", "Bradesco Saúde", "Deficiência auditiva", "(11) 923456789", '9999-92-01'),
+    Paciente(3, "Paciente 3", "senha3", "paciente3@exemplo.com", "Amil", "Nenhuma", "(11) 934567890", '9999-92-01'),
+    Paciente(4, "Paciente 4", "senha4", "paciente4@exemplo.com", "Hapvida", "Deficiência visual", "(11) 945678901", '9999-92-01'),
+    Paciente(5, "Paciente 5", "senha5", "paciente5@exemplo.com", "Unimed", "Mobilidade reduzida", "(11) 956789012", '9999-92-01'),
+    Paciente(6, "Paciente 6", "senha6", "paciente6@exemplo.com", "Bradesco Saúde", "Nenhuma", "(11) 967890123", '9999-92-01'),
+    Paciente(7, "Paciente 7", "senha7", "paciente7@exemplo.com", "Amil", "Deficiência auditiva", "(11) 978901234", '9999-92-01'),
+    Paciente(8, "Paciente 8", "senha8", "paciente8@exemplo.com", "Hapvida", "Mobilidade reduzida", "(11) 989012345", '9999-92-01'),
+    Paciente(9, "Paciente 9", "senha9", "paciente9@exemplo.com", "Unimed", "Nenhuma", "(11) 990123456", '9999-92-01'),
+    Paciente(10, "Paciente 10", "senha10", "paciente10@exemplo.com", "Bradesco Saúde", "Deficiência visual", "(11) 901234567", '9999-92-01'),
 ]
 
 medicos = [
