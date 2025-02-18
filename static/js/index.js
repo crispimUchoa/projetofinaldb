@@ -48,6 +48,18 @@ const stars = document.querySelectorAll(".stars i");
             document.getElementById("nota-media").innerText = data.nova_media;
         })
         .catch(error => console.error("Erro:", error));
+        alert("Avaliação enviada com sucesso");
     }
 
 document.getElementById("marcar-consulta-date").min = new Date().toISOString().slice(0, 16);
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".btn-avaliar").addEventListener("click", function (event) {
+        event.preventDefault(); // Impede o envio imediato do formulário
+
+        let confirmacao = confirm("Tem certeza de que deseja enviar sua avaliação?");
+        if (confirmacao) {
+            enviarAvaliacao();
+        }
+    });
+});

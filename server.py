@@ -6,6 +6,7 @@ import test_data
 from routes.paciente import paciente
 from routes.medico import medico
 
+
 app = Flask(__name__)
 
 app.register_blueprint(paciente, url_prefix='/paciente')
@@ -30,8 +31,6 @@ def login():
 def cadastro():
     import services
     
-    user = request.remote_user
-    print('NOW HE ',user)
     if request.method == 'POST':
         form = request.form
         user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'

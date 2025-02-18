@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, Blueprint
 import test_data
+import queries
+
 
 paciente = Blueprint('paciente', __name__)
 
@@ -19,9 +21,8 @@ def avaliar_consulta(id_consulta):
     consulta = next((cons for cons in test_data.consultas if cons.id == id_consulta), None)
     if request.method == "POST":
         nota = request.form['rating']
-        print(nota)
-        # medico.avaliacoes.append(int(nota))
-        # medico.avaliacao = sum(medico.avaliacoes) / len(medico.avaliacoes)
+        queries.atualizarNotaConsulta(id_consulta, nota)
+        
     return render_template("paciente/avaliar_consulta.html", consulta=consulta)
 
 @paciente.route('/lista_medicos')

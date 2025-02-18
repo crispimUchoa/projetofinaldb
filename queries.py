@@ -10,9 +10,6 @@ user = 'postgres'
 host = 'localhost'
 port = '5432'
 
-conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
-crsr = conn.cursor()
-
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
     crsr = conn.cursor()
@@ -49,7 +46,7 @@ def AVGMedicoConsultas(id_medico):
 
 def cadastrar_paciente(nome, email, senha, data_nascimento, telefone):
     try:
-        conn = db.connection()
+        conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
         crsr1 = conn.cursor()
         crsr2 = conn.cursor()
         query_usuario = "INSERT INTO usuario (nome, email, senha) VALUES (%s, %s, %s RETURNING id;"
@@ -74,7 +71,7 @@ def cadastrar_paciente(nome, email, senha, data_nascimento, telefone):
 
 def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao, atende_plantao):
     try:
-        conn = db.connection()
+        conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
         crsr1 = conn.cursor()
         crsr2 = conn.cursor()
         query_usuario = "INSERT INTO usuario (nome, email, senha) VALUES (%s, %s, %s) RETURNING id_usuario;"
@@ -99,7 +96,7 @@ def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao, at
 
 def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
     try:
-        conn = db.connection()
+        conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
         crsr = conn.cursor()
         query_usuario = "INSERT INTO prescricao (id_consulta, nome_composto_medicamento, observacao) VALUES (%s, %s, %s, %s);"
         crsr.execute(query_usuario, (id_consulta, nome_composto_medicamento, observacao))
@@ -116,7 +113,7 @@ def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
         conn.close()
 
 def mostrarConsultasPaciente(id_paciente):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
@@ -134,7 +131,7 @@ def mostrarConsultasPaciente(id_paciente):
     return tabela_resultado    
 
 def mostrarConsultasMedico(id_medico):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     crsr.execute('''
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
@@ -152,7 +149,7 @@ def mostrarConsultasMedico(id_medico):
     return tabela_resultado
 
 def mostrarMedicoLog(email, senha):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM MEDICO M INNER JOIN USUARIO U ON M.Id_medico = U.Id_Usuario %s = U.email AND %s = U.senha')
     crsr.execute(query_busca, (email, senha))
@@ -162,7 +159,7 @@ def mostrarMedicoLog(email, senha):
     return tabela_resultado
 
 def mostarHorarios(medico):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM HORARIO H JOIN MEDICO M WHERE %s = H.Id_medico')
     crsr.execute(query_busca, (medico.id,))
@@ -173,7 +170,7 @@ def mostarHorarios(medico):
 
 def mostarConsulta(medico):
     medicoref = Medico(medico)
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM CONSLUTA C JOIN MEDICO M WHERE %s = C.Id_medico_consulta')
     crsr.execute(query_busca, (medicoref.id,))
@@ -183,7 +180,7 @@ def mostarConsulta(medico):
     return tabela_resultado
 
 def mostrarPrescricao(id_consulta):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM PRESCRICAO P WHERE %s = P.Id_consulta')
     crsr.execute(query_busca, (id_consulta,))
@@ -194,7 +191,7 @@ def mostrarPrescricao(id_consulta):
 
 def removerHorario(id_medico, horario):
     try:
-        conn = db.connection()
+        conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
         crsr = conn.cursor()
         query_busca = ('DELETE FROM HORARIO H WHERE %s = H.id_medico AND %s = H.horario')
         crsr.execute(query_busca, (id_medico, horario))
@@ -206,7 +203,7 @@ def removerHorario(id_medico, horario):
         conn.close()
 
 def obterClassePaciente(id_paciente):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM USUARIO U INNER JOIN PACIENTE P ON U.Id_usuario = P.Id_paciente AND P.Id_paciente = %s')
     crsr.execute(query_busca, id_paciente)
@@ -214,30 +211,38 @@ def obterClassePaciente(id_paciente):
     return Paciente(id, nome, senha, email, plano_de_saude, data_nascimento, necessidade_especial, telefone)
 
 def obterClasseMedico(id_medico):
-    conn = db.connection()
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
     crsr = conn.cursor()
     query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id_usuario = P.Id_medico AND P.Id_medico = %s')
     crsr.execute(query_busca, id_medico)
     id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = crsr.fetchone()
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
-"""
-    SELECT:
-    -medico que email e senha sejam iguais aos logados *
-    -todos os horarios em que horarios.id_medico = medico.id -
-    -todas as consultas que consulta.id_medico = medico.id 
-    -a consulta em que consulta.id = consulta.id_consulta -
-    -todas as prescrições em que prescricao.id_consulta = id_consulta *
+def atualizarNotaConsulta(id_consulta, nota):
+    conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
+    crsr = conn.cursor()
+    query_busca = ('UPDATE consulta SET nota = %s WHERE id = %s')
+    crsr.execute(query_busca, (nota, id_consulta))
+    crsr.close()
+    conn.close()
 
-    INSERT:
-    -insere medico cadastrado no banco
-    -insere nova prescricao -
-    -insere novo horario
+# """
+#     SELECT:
+#     -medico que email e senha sejam iguais aos logados *
+#     -todos os horarios em que horarios.id_medico = medico.id -
+#     -todas as consultas que consulta.id_medico = medico.id 
+#     -a consulta em que consulta.id = consulta.id_consulta -
+#     -todas as prescrições em que prescricao.id_consulta = id_consulta *
 
-    DELETE:
-    -deleta horario removido *
+#     INSERT:
+#     -insere medico cadastrado no banco
+#     -insere nova prescricao -
+#     -insere novo horario
+
+#     DELETE:
+#     -deleta horario removido *
     
-    Funções:
-    -Obter_Paciente *
-    -Obter_Medico *
-"""
+#     Funções:
+#     -Obter_Paciente *
+#     -Obter_Medico *
+# """
