@@ -295,3 +295,51 @@ textarea{
     padding: 0.5rem;
     font-size: 1.5rem;
 }
+
+.stars {
+    font-size: 2rem;
+    cursor: pointer;
+    color: gray;
+}
+
+.stars i {
+    transition: color 0.2s;
+}
+
+.stars i.checked {
+    color: gold;
+}
+
+.btn-avaliar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: var(--light-blue);
+    border-radius: 5px;
+    &:hover{
+        transition: 0.3s;
+        color: var(--primary-color) !important;
+        background-color: var(--dark-blue);
+    }
+}
+
+.marcar-consulta-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    padding: 1.5rem 3rem;
+    background-color: var(--primary-color);
+    width: 21rem;
+    text-align: center;
+    border-radius: 2px;
+    box-shadow: 5px 5px 15px 5px var(--light-blue);
+}
+
+.marcar-consulta-section {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 90vh;
+}
