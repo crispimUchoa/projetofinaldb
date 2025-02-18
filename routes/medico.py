@@ -7,8 +7,6 @@ medico = Blueprint('medico', __name__)
 def home():
     return render_template('medico/home.html', consultas=test_data.consultas)
 
-
-
 @medico.route('/consulta/<int:id_consulta>')
 def consulta(id_consulta):
     
@@ -17,7 +15,6 @@ def consulta(id_consulta):
         consulta = consulta[0]
     return render_template('medico/consulta.html', consulta=consulta)
 
-#Rot
 @medico.route('/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
 def criar_prescricao(id_consulta):
     q = request.args.get('q').lower() if request.args.get('q') else ''
