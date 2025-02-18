@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 import test_data
 
+from queries import conn, AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
+
 from routes.medico import medico
+
 app = Flask(__name__)
 
 app.register_blueprint(medico, url_prefix='/medico')
@@ -24,6 +27,9 @@ def login():
 @app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
     import services
+    
+    user = request.remote_user
+    print('NOW HE ',user)
     if request.method == 'POST':
         form = request.form
         user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'
