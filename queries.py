@@ -3,6 +3,7 @@ from db import db
 from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
+from entities.Consulta import Consulta
 
 
 def AVGMedicoConsultas(id_medico):
@@ -129,19 +130,28 @@ def mostrarConsultasMedico(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
+        SELECT c.id, U.Nome, c.data, D.Descricao, C.Preco 
         FROM CONSULTA C
-        JOIN MEDICO M ON C.Id_medico_consulta = M.Id_medico
-        JOIN HORARIOS H ON M.Id_medico = H.Id_medico
-        JOIN PACIENTE P ON C.Id_paciente_consulta = P.Id_paciente
-        JOIN Usuario U ON P.Id_paciente = U.ID_Usuario
-        JOIN DESCRICAO D ON C.Id_consulta = D.Id_consulta
-        WHERE M.Id_medico = %s
+        JOIN MEDICO M ON C.Id_medico = M.Id
+        JOIN PACIENTE P ON C.Id_paciente = P.Id
+        JOIN Usuario U ON P.Id = U.ID
+        JOIN DESCRICAO D ON C.Id = D.Id_consulta
+        WHERE M.id = %s
     ''', (id_medico,))
-    tabela_resultado = cursor.fetchall()
+    result = cursor.fetchall()
+    print(result)
     cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT (u.nome) FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
+    medico = cursor.fetchone()[0]
+    cursor.close()
+    consultas = list()
+    for id, paciente, data, descricao, preco in result:
+        consulta = Consulta(id, paciente, medico, data, preco, descricao)
+        consultas.append(consulta)
+
     conn.close()
-    return tabela_resultado
+    return consultas
 
 def criarHorario(id_medico, horario):
     try:
