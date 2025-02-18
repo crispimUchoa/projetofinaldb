@@ -1,7 +1,13 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import test_data
 
+
 from routes import *
+
+#from queries import  AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
+
+from routes.medico import medico
+
 
 app = Flask(__name__)
 
@@ -17,14 +23,15 @@ def login():
         user_type = services.checa_usuario(email, password)
         if user_type:
             if user_type == "medico":
-                return medico_home()
+                return redirect(url_for('medico.home'))
             elif user_type == "paciente":
-                return paciente_home()
+                return redirect(url_for('paciente.home'))
     return render_template("login.html")
 
 @app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
     import services
+    
     if request.method == 'POST':
         form = request.form
         user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'
@@ -55,8 +62,8 @@ def avaliar_medico(id_medico):
             return jsonify({"erro": "Nota inválida"}), 400  # Retorna erro se a nota for inválida
         # Aqui você pode salvar a nota no banco de dados ou atualizar a média do médico
         # Simulação de atualização da média:
-        medico.avaliacoes.append(int(nota))
-        medico.avaliacao = sum(medico.avaliacoes) / len(medico.avaliacoes)
+        # medico.avaliacao.append(int(nota))
+        # medico.avaliacao = sum(medico.avaliacao) / len(medico.avaliacao)
         return jsonify({"mensagem": "Avaliação registrada com sucesso!", "nova_media": medico.avaliacao})
 
     # Se for GET, renderiza a página normalmente

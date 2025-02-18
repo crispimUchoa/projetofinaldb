@@ -11,7 +11,9 @@
     --light-blue: #BCCCDC;
     --dark-blue: #9AA6B2;
 }
-
+a{
+    color: black;
+}
 body{
     background-color: var(--secundary-color);
 }
