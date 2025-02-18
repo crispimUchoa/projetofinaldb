@@ -5,6 +5,7 @@ from entities.Horario import Horario
 from entities.Paciente import Paciente
 from entities.Consulta import Consulta
 from entities.Prescricao import Prescricao
+from entities.Medicamento import Medicamento
 
 
 def AVGMedicoConsultas(id_medico):
@@ -270,3 +271,15 @@ def obterClasseMedico(id_medico):
     cursor.execute(query_busca, id_medico)
     id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = cursor.fetchone()
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
+
+def obter_medicamentos():
+    conn = db.connection()
+    cursor = conn.cursor()
+    query = 'SELECT * FROM medicamento'
+    cursor.execute(query)
+    medicamentos = list()
+    for med in cursor.fetchall():
+        nome_composto, laboratorio = med
+        medicamento = Medicamento(nome_composto, laboratorio)
+        medicamentos.append(medicamento)
+    return medicamentos
