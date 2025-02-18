@@ -1,4 +1,8 @@
 from psycopg2 import connect
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 
 class DB():
     def __init__ (self, dbname, password, user, host, port):
@@ -12,4 +16,4 @@ class DB():
         conn = connect(dbname=self.dbname,password=self.password,user=self.user,host=self.host,port=self.port)
         return conn
     
-db = DB('railway', 'dLZGjVutNkAFzasklAeLSqrUaPMrmeKq', 'postgres', 'switchback.proxy.rlwy.net', '41846')
+db = DB(os.getenv('DB_NAME'), os.getenv('PASSWORD'), os.getenv('USER'), os.getenv('HOST'), os.getenv('PORT'))
