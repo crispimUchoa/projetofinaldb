@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 import test_data
+
 from queries import conn, AVGMedicoConsultas, BuscarMedicos, cadastrar_paciente, mostrarConsultasMedico, mostrarConsultasPaciente
+
+from routes.medico import medico
+
 app = Flask(__name__)
+
+app.register_blueprint(medico, url_prefix='/medico')
 
 #Rotas de formulário
 @app.route("/", methods=['GET', 'POST'])
@@ -21,6 +27,9 @@ def login():
 @app.route("/cadastro", methods=['GET', 'POST'])
 def cadastro():
     import services
+    
+    user = request.remote_user
+    print('NOW HE ',user)
     if request.method == 'POST':
         form = request.form
         user_existe = 'usuario ja existente' if services.checa_email_existe(form['email']) else 'sucesso ao cadastrar e-mail!'
@@ -58,51 +67,18 @@ def avaliar_medico(id_medico):
     # Se for GET, renderiza a página normalmente
     return render_template("paciente/avaliar_medico.html", medico=medico)
 
-#Rotas do medico
-@app.route('/medico/home')
-def medico_home():
+@app.route('/paciente/lista_medicos')
+def lista_medicos():
+    return render_template("paciente/lista_medicos.html", medicos=test_data.medicos)
 
-    return render_template('medico/home.html', consultas=test_data.consultas)
+@app.route('/paciente/marcar_consulta/<int:id_medico>')
+def marcar_consulta(id_medico):
+    medico = list(filter(lambda cons: cons.id == id_medico, test_data.medicos))
+    if medico:
+        medico = medico[0]
+    return render_template("paciente/marcar_consulta.html", medico=medico)
 
-@app.route('/medico/consulta/<int:id_consulta>')
-def medico_consulta(id_consulta):
-    
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
-    return render_template('medico/consulta.html', consulta=consulta)
-
-#Rot
-@app.route('/medico/consulta/<int:id_consulta>/prescricao', methods = ["GET", "POST"])
-def criar_prescricao(id_consulta):
-    q = request.args.get('q').lower() if request.args.get('q') else ''
-    
-    medicamentos = filter(lambda med: q in med.nome_do_composto.lower() ,test_data.medicamentos)
-
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
-
-    if request.method == 'POST':
-        from entities.Prescricao import Prescricao
-        print(request.form)
-        
-    return render_template('medico/prescricao.html', consulta=consulta, medicamentos=medicamentos)
-
-@app.route('/medico/perfil')
-def medico_perfil():
-    medico = test_data.medicos[0]
-    return render_template('medico/perfil.html', medico=medico)
-
-@app.route('/medico/alterar_horarios', methods=['GET', 'POST'])
-def alterar_horarios():
-    medico = test_data.medicos[0]
-    todos_horarios = [f'{str(n).zfill(2)}:00-{str(n+4).zfill(2)}:00' for n in range(8, 18)]
-
-    if request.method=='POST':
-        print(request.form)
-
-    return render_template('medico/alterar_horarios.html', medico=medico, todos_horarios=todos_horarios)
+#
 
 if __name__ == "__main__":
     app.run(debug=True)
