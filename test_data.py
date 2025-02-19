@@ -46,13 +46,13 @@ consultas = [
 users = [*pacientes, *medicos]
 
 medicamentos = [
-    Medicamento("Paracetamol", "Laboratório A"),
-    Medicamento("Ibuprofeno", "Laboratório B"),
+    Medicamento("paracetamol", "Laboratório A"),
+    Medicamento("ibuprofeno", "Laboratório B"),
     Medicamento("Amoxicilina", "Laboratório C"),
     Medicamento("Dipirona", "Laboratório D"),
     Medicamento("Omeprazol", "Laboratório E"),
     Medicamento("Losartana", "Laboratório F"),
-    Medicamento("Loratadina", "Laboratório G"),
+    Medicamento("loratadina", "Laboratório G"),
     Medicamento("Metformina", "Laboratório H"),
     Medicamento("Azitromicina", "Laboratório I"),
     Medicamento("Fluoxetina", "Laboratório J")

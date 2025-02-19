@@ -6,6 +6,10 @@ from entities.Paciente import Paciente
 from entities.Consulta import Consulta
 from entities.Prescricao import Prescricao
 
+from entities.Medicamento import Medicamento
+
+
+
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
@@ -89,12 +93,19 @@ def cadastrar_medico(nome, email, senha, especializacao, horarios, avaliacao, at
         cursor2.close()
         conn.close()
 
-def adicionar_Prescricao(id_consulta, nome_composto_medicamento, observacao):
+def adicionar_Prescricao(id_consulta, prescricao):
+    medicamentos, obs = prescricao.values()
+    med_values = list()
+    for med in medicamentos:
+        med_values.append((id_consulta, med, obs))
+        
     try:
         conn = db.connection()
         cursor = conn.cursor()
-        query_usuario = "INSERT INTO prescricao (id_consulta, nome_composto_medicamento, observacao) VALUES (%s, %s, %s, %s);"
-        cursor.execute(query_usuario, (id_consulta, nome_composto_medicamento, observacao))
+        query_usuario = "INSERT INTO prescricao (id_consulta, composto_medicamento, observacao) VALUES (%s, %s, %s);" 
+        print(query_usuario)
+        print(med_values)
+        cursor.executemany(query_usuario, med_values)
 
         conn.commit()
         print("Prescricao escrita com sucesso!")
@@ -129,6 +140,25 @@ def mostrarConsultasMedico(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
     cursor.execute('''
+
+        SELECT c.id,  up.nome, c.data, d.descricao, c.preco
+        FROM consulta c
+        INNER JOIN usuario up ON up.id = c.id_paciente
+        LEFT JOIN descricao d ON d.id_consulta = c.id
+        WHERE EXISTS (
+        SELECT 1
+        FROM consulta c2
+        WHERE c2.id = c.id
+        AND c2.id_medico = %s
+);
+    ''', (id_medico,))
+    result = cursor.fetchall()
+    print(result)
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT u.nome FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
+    medico = cursor.fetchone()
+
         SELECT U.Nome, H.Id_horario, D.Descricao, C.Preco 
         FROM CONSULTA C
         JOIN MEDICO M ON C.Id_medico_consulta = M.Id_medico
@@ -139,16 +169,22 @@ def mostrarConsultasMedico(id_medico):
         WHERE M.Id_medico = %s
     ''', (id_medico,))
     tabela_resultado = cursor.fetchall()
+
     cursor.close()
     conn.close()
     return tabela_resultado
 
-def criarHorario(id_medico, horario):
+def criarHorario(id_medico, horarios):
     try:
         conn = db.connection()
         cursor = conn.cursor()
-        query_busca = ('INSERT INTO HORARIO(id_medico, horario) VALUE (%s, %s)')
-        cursor.execute(query_busca, (id_medico, horario))
+        print(horarios)
+        cursor.execute("DELETE FROM horarios WHERE id_medico=%s", (id_medico,)) 
+            
+        cursor.close()
+        cursor = conn.cursor()
+        query_busca = ('INSERT INTO HORARIOS (id_medico, horario) VALUES (%s, %s)')
+        cursor.executemany(query_busca, [(id_medico, horario) for horario in horarios])
         conn.commit()
     except psycopg2.Error as e:
         conn.rollback()
@@ -177,7 +213,11 @@ def mostarHorarios(id_medico):
     conn.close()
     return tabela_resultado
 
+
+def mostarConsulta(id_consulta):
+
 def mostrarConsulta(id_consulta):
+
     conn = db.connection()
     cursor = conn.cursor()
     query_busca = ("""
@@ -186,15 +226,27 @@ def mostrarConsulta(id_consulta):
     INNER JOIN medico m ON m.id = um.id
     INNER JOIN usuario up ON up.id = c.id_paciente
     INNER JOIN paciente p ON p.id = up.id
+
+    LEFT JOIN descricao d ON d.id_consulta=c.id
+
     INNER JOIN descricao d ON d.id_consulta=c.id
+
     WHERE c.id= %s;
     """)
     cursor.execute(query_busca, (id_consulta,))
     consulta_data = cursor.fetchone()
+
+    print('DATA', consulta_data)
+
+
     if not consulta_data:
         return
     id, data, preco, nota, medico, paciente, descricao = consulta_data
     cursor.close()
+
+
+
+
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM prescricao WHERE id_consulta = %s', (id_consulta,))
     prescricoes_data = cursor.fetchall()
@@ -203,7 +255,16 @@ def mostrarConsulta(id_consulta):
         consulta, medicamento, obs = p
         prescricao = Prescricao(consulta, medicamento, obs)
         prescricoes.append(prescricao)
+
+        
     consulta = Consulta(id, paciente, medico, data, preco, descricao, nota=nota if nota else 0,prescricoes=prescricoes)
+
+    
+
+
+
+    consulta = Consulta(id, paciente, medico, data, preco, descricao, nota=nota if nota else 0,prescricoes=prescricoes)
+
     conn.close()
     return consulta
 
@@ -256,6 +317,32 @@ def atualizarNotaConsulta(id_consulta, nota):
 def mostrarConsultasMedico(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
+
+    query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id = M.Id WHERE M.Id = %s')
+    cursor.execute(query_busca, (id_medico,))
+    id, nome, senha, email, id_prov, especializacao, avaliacao, atende_plantao = cursor.fetchone()
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM horarios WHERE id_medico=%s', (id_medico,))
+    horarios = []
+    for h in cursor.fetchall():
+        horario = Horario(id_medico, h[1])
+        horarios.append(horario)
+    cursor.close()
+    return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
+
+def obter_medicamentos(q):
+    conn = db.connection()
+    cursor = conn.cursor()
+    query = f"SELECT * FROM medicamento WHERE nome_do_composto ILIKE '%{q}%';" if q else 'SELECT * FROM medicamento'
+    cursor.execute(query)
+    medicamentos = list()
+    for med in cursor.fetchall():
+        nome_composto, laboratorio = med
+        medicamento = Medicamento(nome_composto, laboratorio)
+        medicamentos.append(medicamento)
+    return medicamentos
+
     cursor.execute('''
         SELECT c.id, U.Nome, c.data, D.Descricao, C.Preco 
         FROM CONSULTA C
@@ -335,3 +422,4 @@ def marcaConsulta(id_medico, id_paciente, preco, data, descricao):
     conn.commit()
     cursor.close()
     conn.close()
+
