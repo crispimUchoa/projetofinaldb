@@ -6,7 +6,7 @@ medico = Blueprint('medico', __name__)
 
 @medico.route('/home')
 def home():
-    consultas = queries.mostrarConsultasMedico(8)
+    consultas = queries.mostrarConsultasMedico(7)
     print(consultas)
     return render_template('medico/home.html', consultas=consultas)
 

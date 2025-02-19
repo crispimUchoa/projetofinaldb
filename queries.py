@@ -208,11 +208,12 @@ def mostarConsulta(id_consulta):
     INNER JOIN medico m ON m.id = um.id
     INNER JOIN usuario up ON up.id = c.id_paciente
     INNER JOIN paciente p ON p.id = up.id
-    INNER JOIN descricao d ON d.id_consulta=c.id
+    LEFT JOIN descricao d ON d.id_consulta=c.id
     WHERE c.id= %s;
     """)
     cursor.execute(query_busca, (id_consulta,))
     consulta_data = cursor.fetchone()
+    print('DATA', consulta_data)
     if not consulta_data:
         return
     id, data, preco, nota, medico, paciente, descricao = consulta_data

@@ -5,11 +5,33 @@
     <div class="detalhes-consulta">
 
         <h3 class='consulta-detalhe nome-paciente'>Paciente: {{consulta.paciente}}</h3>
-        <p class='consulta-detalhe descricao'>{{consulta.descricoes}}</p>
-        <h5 class='consulta-detalhe nota' >{{consulta.nota}}</h5>
+        <p class='consulta-detalhe descricao'>
+            {% if consulta.descricoes %}
+            {{consulta.descricoes}}
+            {% else %}
+            Sem descrição.
+            {% endif %}
+        </p>
+        <h5 class='consulta-detalhe nota' >Nota: 
+            {% if consulta.nota > 0 %}
+            {{consulta.nota}}
+            {% else %}
+            Sem nota atribuída
+            {% endif %}
+        </h5>
         <h5 class='consulta-detalhe data'>{{consulta.data}}</h5>
         <h3>Prescrições</h5>
-            <p class='consulta-detalhe prescricoes' >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odio nemo similique esse aliquam explicabo. Sit ex voluptates itaque cumque tempore impedit excepturi inventore animi laborum modi alias iure adipisci voluptas, porro ullam saepe. Nobis voluptates incidunt, voluptatibus neque eum maxime repellat perferendis laboriosam! Repellat illo laborum itaque ipsam soluta consequuntur.</p>
+            <h5>Medicamentos:</h5>
+            <ul>
+                {% for prescricao in consulta.prescricoes %}
+                <li>{{prescricao.nome_composto_medicamento}}</li>
+                {% endfor %}
+            </ul>
+            <h5>Observacao: 
+            {% if consulta.prescricoes %}
+            {{consulta.prescricoes[0].observacao}}
+            {% endif %}
+        </h5>
         <div class="botoes">
             <a href="{{ url_for('medico.criar_prescricao', id_consulta = consulta.id) }}" class='link-btn fazer-prescricao-btn'>Fazer prescrição</a>
             <a href="{{ url_for('medico.home') }}" class='link-btn fazer-prescricao-btn'>Voltar</a>
