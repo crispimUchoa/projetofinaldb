@@ -48,6 +48,37 @@ const stars = document.querySelectorAll(".stars i");
             document.getElementById("nota-media").innerText = data.nova_media;
         })
         .catch(error => console.error("Erro:", error));
+        alert("Avaliação enviada com sucesso");
     }
 
 document.getElementById("marcar-consulta-date").min = new Date().toISOString().slice(0, 16);
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".btn-avaliar").addEventListener("click", function (event) {
+        event.preventDefault(); // Impede o envio imediato do formulário
+
+        let confirmacao = confirm("Tem certeza de que deseja enviar sua avaliação?");
+        if (confirmacao) {
+            enviarAvaliacao();
+        }
+    });
+});
+
+const botao = document.getElementById("marcar-consulta-btn");
+    if (!botao) {
+        console.error("Botão não encontrado!");
+        return;
+    }
+
+
+    const form = document.querySelector(".marcar-consulta-form");
+    const horariosOcupados = JSON.parse(form.getAttribute("data-horarios"));
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const inputDataHora = document.getElementById("marcar-consulta-date").value;
+        if (horariosOcupados.includes(inputDataHora)) {
+            alert("Este horário já está ocupado. Escolha outro.");
+
+        }
+    });
