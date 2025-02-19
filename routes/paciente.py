@@ -30,7 +30,8 @@ def lista_medicos():
     medicos = queries.BuscarMedicos()
     return render_template("paciente/lista_medicos.html", medicos=medicos)
 
-@paciente.route('/marcar_consulta/<int:id_medico>')
+@paciente.route('/marcar_consulta/<int:id_medico>', methods=['POST', 'GET'])
 def marcar_consulta(id_medico):
     medico = queries.obterClasseMedico(id_medico)
-    return render_template("paciente/marcar_consulta.html", medico=medico)
+    consultas = queries.mostrarConsultasMedico(id_medico)
+    return render_template("paciente/marcar_consulta.html", medico=medico, consultas=consultas)

@@ -1,7 +1,12 @@
 {% extends "base/index.html" %}
 {% block body %}
 <section class="marcar-consulta-section">
-    <form action="" method="post" class="marcar-consulta-form">
+    <form action="{{ url_for('paciente.marcar_consulta', id_medico=medico.id) }}" method="post" class="marcar-consulta-form">
+        data-horarios='[
+        {% for consulta in consultas %}
+            "{{ consulta.data.strftime('%Y-%m-%dT%H:%M') }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+        ]'>
         <h1>Escolha uma data e um horário disponíveis</h1>
         <h5>Médico: {{medico.nome}}</h5>
         <h5>Horários de atendimento: {% for horario in medico.horarios %}
@@ -9,7 +14,7 @@
             {% endfor %}
         </h5>
         <input type="datetime-local" name="marcar-consulta-date" id="marcar-consulta-date">
-        <button type="submit" class="btn">Marcar</button>
+        <button type="submit" class="btn" id="marcar-consulta-btn">Marcar</button>
     </form>
 </section>
 {% endblock %}

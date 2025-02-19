@@ -266,7 +266,6 @@ def mostrarConsultasMedico(id_medico):
         WHERE M.id = %s
     ''', (id_medico,))
     result = cursor.fetchall()
-    print(result)
     cursor.close()
     cursor = conn.cursor()
     cursor.execute('SELECT (u.nome) FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
@@ -274,9 +273,9 @@ def mostrarConsultasMedico(id_medico):
     cursor.close()
     consultas = list()
     for id, paciente, data, descricao, preco in result:
+        print(data)
         consulta = Consulta(id, paciente, medico, data, preco, descricao)
         consultas.append(consulta)
-
     conn.close()
     return consultas
 
