@@ -1,4 +1,8 @@
 from psycopg2 import connect
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 
 class DB():
     def __init__ (self, dbname, password, user, host, port):

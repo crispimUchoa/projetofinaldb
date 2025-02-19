@@ -4,7 +4,10 @@
     <form action="" method="post" class="marcar-consulta-form">
         <h1>Escolha uma data e um horário disponíveis</h1>
         <h5>Médico: {{medico.nome}}</h5>
-        <h5>Horários de atendimento: {{medico.horarios}}</h5>
+        <h5>Horários de atendimento: {% for horario in medico.horarios %}
+            {{horario.horario}} 
+            {% endfor %}
+        </h5>
         <input type="datetime-local" name="marcar-consulta-date" id="marcar-consulta-date">
         <button type="submit" class="btn">Marcar</button>
     </form>

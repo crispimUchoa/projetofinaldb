@@ -1,3 +1,6 @@
 <span class="consulta-medico">{{medico.nome}}</span>
 <span class="consulta-descricoes">{{medico.especializacao}}</span>
-<span class="consulta-data">{{medico.horarios}}</span>
+<span class="consulta-data">{% for horario in medico.horarios %}
+{{horario.horario}} 
+{% endfor %}
+</span>

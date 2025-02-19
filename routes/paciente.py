@@ -2,10 +2,6 @@ from flask import Flask, render_template, request, Blueprint, session
 import test_data
 import queries
 
-<<<<<<< HEAD
-=======
-
->>>>>>> hchuvas
 
 paciente = Blueprint('paciente', __name__)
 
@@ -17,32 +13,24 @@ def home():
 
 @paciente.route("/consulta/<int:id_consulta>")
 def consulta(id_consulta):
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
+    consulta = queries.mostrarConsulta(id_consulta)
     return render_template("paciente/consulta.html", consulta=consulta)
 
 @paciente.route("/avaliar_consulta/<int:id_consulta>", methods=["GET", "POST"])
 def avaliar_consulta(id_consulta):
-    consulta = list(filter(lambda cons: cons.id == id_consulta, test_data.consultas))
-    if consulta:
-        consulta = consulta[0]
+    consulta = queries.mostrarConsulta(id_consulta)
     if request.method == "POST":
         nota = request.form['rating']
         queries.atualizarNotaConsulta(id_consulta, nota)
-<<<<<<< HEAD
         
-=======
->>>>>>> hchuvas
     return render_template("paciente/avaliar_consulta.html", consulta=consulta)
 
 @paciente.route('/lista_medicos')
 def lista_medicos():
-    return render_template("paciente/lista_medicos.html", medicos=test_data.medicos)
+    medicos = queries.BuscarMedicos()
+    return render_template("paciente/lista_medicos.html", medicos=medicos)
 
 @paciente.route('/marcar_consulta/<int:id_medico>')
 def marcar_consulta(id_medico):
-    medico = list(filter(lambda cons: cons.id == id_medico, test_data.medicos))
-    if medico:
-        medico = medico[0]
+    medico = queries.obterClasseMedico(id_medico)
     return render_template("paciente/marcar_consulta.html", medico=medico)

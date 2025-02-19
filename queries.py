@@ -4,18 +4,7 @@ from entities.Medico import Medico
 from entities.Horario import Horario
 from entities.Paciente import Paciente
 from entities.Consulta import Consulta
-
-def AVGMedicoConsultas(id_medico):
-    conn = db.connection()
-    crsr = conn.cursor()
-    query_avg = ('SELECT ID_Medico_Consulta AS ID_Medico, AVG(Nota) AS Media_Avaliacao FROM Consulta WHERE Nota IS NOT AND ID_Medico = %s NULL GROUP BY ID_Medico_Consulta')
-    crsr.execute(query_avg, (id_medico,))
-    crsr.fetchone()
-    conn.commit()
-    tabela_resultado = crsr.fetchone()
-    crsr.close()
-    conn.close()
-    return tabela_resultado    
+from entities.Prescricao import Prescricao
 
 def AVGMedicoConsultas(id_medico):
     conn = db.connection()
@@ -33,21 +22,20 @@ def BuscarMedicos():
 
     conn = db.connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT (M.Id_medico, U.Nome, M.Especializacao, M.Avaliacao) FROM MEDICO M INNER JOIN Usuario U ON M.ID_Medico = U.ID_Usuario')
+    cursor.execute('SELECT M.Id, U.Nome, M.Especializacao, M.Avaliacao FROM MEDICO M INNER JOIN Usuario U ON M.ID = U.ID')
     result_medicos = cursor.fetchall()
     medicos = list()
     cursor.close()
     for id, nome, especializacao, avaliacao in result_medicos:
         horarios = []
         cursor = conn.cursor()
-        cursor.execute(f'SELECT * FROM HORARIOS WHERE ID_MEDICO = {id}')
+        cursor.execute('SELECT * FROM HORARIOS WHERE ID_MEDICO = %s', (id,))
         result_horarios = cursor.fetchall()
         for id_medico, id_horario in result_horarios:
             horario = Horario(id_medico, id_horario)
             horarios.append(horario)
-            medico = Medico(id, nome, '', '', especializacao, horarios, avaliacao, 'sim')
-            medicos.append(medico)
-
+        medico = Medico(id, nome, '', '', especializacao, horarios, avaliacao, 'sim')
+        medicos.append(medico)
     return medicos
 
 
@@ -189,15 +177,35 @@ def mostarHorarios(id_medico):
     conn.close()
     return tabela_resultado
 
-def mostarConsulta(id_medico):
+def mostrarConsulta(id_consulta):
     conn = db.connection()
     cursor = conn.cursor()
-    query_busca = ('SELECT * FROM CONSULTA WHERE id_medico_consulta = %s')
-    cursor.execute(query_busca, (id_medico,))
-    tabela_resultado = cursor.fetchall()
+    query_busca = ("""
+    SELECT c.id, c.data, c.preco, c.nota, um.nome, up.nome, d.descricao FROM consulta c 
+    INNER JOIN usuario um ON um.id = c.id_medico
+    INNER JOIN medico m ON m.id = um.id
+    INNER JOIN usuario up ON up.id = c.id_paciente
+    INNER JOIN paciente p ON p.id = up.id
+    INNER JOIN descricao d ON d.id_consulta=c.id
+    WHERE c.id= %s;
+    """)
+    cursor.execute(query_busca, (id_consulta,))
+    consulta_data = cursor.fetchone()
+    if not consulta_data:
+        return
+    id, data, preco, nota, medico, paciente, descricao = consulta_data
     cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM prescricao WHERE id_consulta = %s', (id_consulta,))
+    prescricoes_data = cursor.fetchall()
+    prescricoes = []
+    for p in prescricoes_data:
+        consulta, medicamento, obs = p
+        prescricao = Prescricao(consulta, medicamento, obs)
+        prescricoes.append(prescricao)
+    consulta = Consulta(id, paciente, medico, data, preco, descricao, nota=nota if nota else 0,prescricoes=prescricoes)
     conn.close()
-    return tabela_resultado
+    return consulta
 
 def mostrarPrescricao(id_consulta):
     conn = db.connection()
@@ -232,12 +240,10 @@ def obterClassePaciente(id_paciente):
     return Paciente(id, nome, senha, email, plano_de_saude, data_nascimento, necessidade_especial, telefone)
 
 def obterClasseMedico(id_medico):
-    conn = db.connection()
-    cursor = conn.cursor()
-    query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id_usuario = P.Id_medico AND P.Id_medico = %s')
-    cursor.execute(query_busca, id_medico)
-    id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = cursor.fetchone()
-    return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
+    medicos = BuscarMedicos()
+    for medico in medicos:
+        if id_medico == medico.id:
+            return medico
 
 def atualizarNotaConsulta(id_consulta, nota):
     conn = db.connection()
@@ -316,4 +322,4 @@ def procuraUsuario(email, password):
             return Medico(id, nome, senha, email, especializacao, avaliacao, atende_plantao)
     else:
         id, nome, senha, email, plano_de_saude, data_de_nascimento, necessidade_especial, telefone = usuario
-        return Paciente(id, nome, senha, email, plano_de_saude, necessidade_especial, telefone)
+        return Paciente(id, nome, senha, email, plano_de_saude, data_de_nascimento, necessidade_especial, telefone)

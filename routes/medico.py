@@ -1,11 +1,14 @@
 from flask import Flask, render_template, request, Blueprint
 import test_data
+import queries
 
 medico = Blueprint('medico', __name__)
 
 @medico.route('/home')
 def home():
-    return render_template('medico/home.html', consultas=test_data.consultas)
+    consultas = queries.mostrarConsultasMedico(8)
+    print(consultas)
+    return render_template('medico/home.html', consultas=consultas)
 
 @medico.route('/consulta/<int:id_consulta>')
 def consulta(id_consulta):
