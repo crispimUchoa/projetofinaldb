@@ -20,7 +20,7 @@ def consulta(id_consulta):
 def criar_prescricao(id_consulta):
     q = request.args.get('q').lower() if request.args.get('q') else ''
     
-    medicamentos = queries.obter_medicamentos()
+    medicamentos = queries.obter_medicamentos(q)
 
     consulta = queries.mostarConsulta(3)
 

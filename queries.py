@@ -139,20 +139,23 @@ def mostrarConsultasMedico(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT c.id, U.Nome, c.data, D.Descricao, C.Preco 
-        FROM CONSULTA C
-        JOIN MEDICO M ON C.Id_medico = M.Id
-        JOIN PACIENTE P ON C.Id_paciente = P.Id
-        JOIN Usuario U ON P.Id = U.ID
-        JOIN DESCRICAO D ON C.Id = D.Id_consulta
-        WHERE M.id = %s
+        SELECT c.id,  up.nome, c.data, d.descricao, c.preco
+        FROM consulta c
+        INNER JOIN usuario up ON up.id = c.id_paciente
+        LEFT JOIN descricao d ON d.id_consulta = c.id
+        WHERE EXISTS (
+        SELECT 1
+        FROM consulta c2
+        WHERE c2.id = c.id
+        AND c2.id_medico = %s
+);
     ''', (id_medico,))
     result = cursor.fetchall()
     print(result)
     cursor.close()
     cursor = conn.cursor()
-    cursor.execute('SELECT (u.nome) FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
-    medico = cursor.fetchone()[0]
+    cursor.execute('SELECT u.nome FROM medico m INNER JOIN usuario u ON u.id=m.id WHERE m.id=%s', (id_medico,))
+    medico = cursor.fetchone()
     cursor.close()
     consultas = list()
     for id, paciente, data, descricao, preco in result:
@@ -272,10 +275,10 @@ def obterClasseMedico(id_medico):
     id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = cursor.fetchone()
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
-def obter_medicamentos():
+def obter_medicamentos(q):
     conn = db.connection()
     cursor = conn.cursor()
-    query = 'SELECT * FROM medicamento'
+    query = f"SELECT * FROM medicamento WHERE nome_do_composto ILIKE '%{q}%';" if q else 'SELECT * FROM medicamento'
     cursor.execute(query)
     medicamentos = list()
     for med in cursor.fetchall():
