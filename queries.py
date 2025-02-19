@@ -234,8 +234,8 @@ def removerHorario(id_medico, horario):
 def obterClassePaciente(id_paciente):
     conn = db.connection()
     cursor = conn.cursor()
-    query_busca = ('SELECT * FROM USUARIO U INNER JOIN PACIENTE P ON U.Id_usuario = P.Id_paciente AND P.Id_paciente = %s')
-    cursor.execute(query_busca, id_paciente)
+    query_busca = ('SELECT * FROM USUARIO U INNER JOIN PACIENTE P ON U.Id = P.Id WHERE P.Id = %s')
+    cursor.execute(query_busca, (id_paciente,))
     id, nome, senha, email, id_prov, plano_de_saude, data_nascimento, necessidade_especial, telefone = cursor.fetchone()
     return Paciente(id, nome, senha, email, plano_de_saude, data_nascimento, necessidade_especial, telefone)
 
@@ -322,3 +322,16 @@ def procuraUsuario(email, password):
     else:
         id, nome, senha, email, plano_de_saude, data_de_nascimento, necessidade_especial, telefone = usuario
         return Paciente(id, nome, senha, email, plano_de_saude, data_de_nascimento, necessidade_especial, telefone)
+
+def marcaConsulta(id_medico, id_paciente, preco, data, descricao):
+    conn = db.connection()
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO consulta (id_medico, id_paciente, preco, data) VALUES (%s, %s, %s, %s) RETURNING id', (id_medico, id_paciente, preco, data))
+    id_consulta = cursor.fetchone()[0]
+    conn.commit()
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO descricao (id_consulta, descricao) VALUES (%s, %s)', (id_consulta, descricao))
+    conn.commit()
+    cursor.close()
+    conn.close()

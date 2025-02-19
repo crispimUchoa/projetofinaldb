@@ -64,21 +64,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector(".marcar-consulta-form");
-    const horariosOcupados = JSON.parse(form.getAttribute("data-horarios"));
-
-    const botao = document.getElementById("marcar-consulta-btn");
+const botao = document.getElementById("marcar-consulta-btn");
     if (!botao) {
         console.error("Botão não encontrado!");
         return;
     }
 
-    botao.addEventListener("click", function (event) {
+
+    const form = document.querySelector(".marcar-consulta-form");
+    const horariosOcupados = JSON.parse(form.getAttribute("data-horarios"));
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
         const inputDataHora = document.getElementById("marcar-consulta-date").value;
         if (horariosOcupados.includes(inputDataHora)) {
             alert("Este horário já está ocupado. Escolha outro.");
-            event.preventDefault();
+
         }
     });
-});
