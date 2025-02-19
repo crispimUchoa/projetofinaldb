@@ -29,6 +29,24 @@ input {
 .navbar{
     background-color: var(--dark-blue);
     height: 4rem;
+    font-size: 20px;
+    padding: 0 10rem;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    gap: 2rem;
+}
+
+.navbar a{
+    color: var(--primary-color) !important;
+    text-decoration: none;
+    &:hover{
+        transition: 0.3s;
+        cursor: pointer;
+        color: var(--secundary-color) !important;
+    }
 }
 .content{
     padding: 1rem 10rem;

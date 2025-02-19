@@ -10,7 +10,17 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/hospital.png') }}" type="image/x-icon">
 </head>
 <body>
-    <nav class='navbar'></nav>
+    {% if role=='pac' %}
+    <nav class='navbar'>
+        <a href="{{ url_for('paciente.home')}}">Minhas consultas</a>
+    </nav>
+    {% elif role=='med' %}
+    <nav class='navbar'>
+        <a href="{{ url_for('medico.home')}}">Minhas consultas</a>
+        <a href="{{ url_for('medico.perfil')}}">Meu perfil</a>
+
+    </nav>
+    {% endif %}
     <main class="main">
         {% block body %}{% endblock %}
     </main>

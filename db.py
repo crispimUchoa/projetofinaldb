@@ -16,4 +16,4 @@ class DB():
         conn = connect(dbname=self.dbname,password=self.password,user=self.user,host=self.host,port=self.port)
         return conn
     
-db = DB('flask_db', 'Chtehe112327!', 'postgres', 'localhost', '5432')
+db = DB(os.getenv('DB_NAME'), os.getenv('PASSWORD'), os.getenv('USER'), os.getenv('HOST'), os.getenv('PORT'))

@@ -1,6 +1,6 @@
 
 class Consulta:
-    def __init__(self, id, paciente, medico, data, preco, descricoes, nota=0, prescricoes = ''):
+    def __init__(self, id, paciente, medico, data, preco, descricoes, nota=0, prescricoes = []):
         self.id = id
         self.paciente = paciente
         self.medico = medico
