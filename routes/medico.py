@@ -39,10 +39,11 @@ def perfil():
 
 @medico.route('/alterar_horarios', methods=['GET', 'POST'])
 def alterar_horarios():
-    medico = test_data.medicos[0]
-    todos_horarios = [f'{str(n).zfill(2)}:00-{str(n+4).zfill(2)}:00' for n in range(8, 18)]
+    medico = test_data.medicos[6]
+    todos_horarios = [f'{str(n).zfill(2)}:00' for n in range(6, 18)]
 
     if request.method=='POST':
-        print(request.form)
+        horarios = request.form.getlist('alterar_horarios')
+        queries.criarHorario(7, horarios)
 
     return render_template('medico/alterar_horarios.html', medico=medico, todos_horarios=todos_horarios)

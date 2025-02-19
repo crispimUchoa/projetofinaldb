@@ -7,10 +7,10 @@
             {% for horario in todos_horarios %}
             <li class="form-group">
             {% if horario in medico.horarios %}
-                <input type="checkbox" name="alterar_horarios" id="{{horario}}" value={{horario}} checked>
+                <input type="checkbox" name="alterar_horarios" id="{{horario}}" value="{{horario}}" checked>
             
             {% else %}
-                <input type="checkbox" name="alterar_horarios" id="{{horario}}">
+                <input type="checkbox" name="alterar_horarios" id="{{horario}}" value="{{horario}}">
             {% endif %}
             <label for="{{horario}}">{{horario}}</label><br>
         </li>

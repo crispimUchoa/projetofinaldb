@@ -165,12 +165,17 @@ def mostrarConsultasMedico(id_medico):
     conn.close()
     return consultas
 
-def criarHorario(id_medico, horario):
+def criarHorario(id_medico, horarios):
     try:
         conn = db.connection()
         cursor = conn.cursor()
-        query_busca = ('INSERT INTO HORARIO(id_medico, horario) VALUE (%s, %s)')
-        cursor.execute(query_busca, (id_medico, horario))
+        print(horarios)
+        cursor.execute("DELETE FROM horarios WHERE id_medico=%s", (id_medico,)) 
+            
+        cursor.close()
+        cursor = conn.cursor()
+        query_busca = ('INSERT INTO HORARIOS (id_medico, horario) VALUES (%s, %s)')
+        cursor.executemany(query_busca, [(id_medico, horario) for horario in horarios])
         conn.commit()
     except psycopg2.Error as e:
         conn.rollback()
