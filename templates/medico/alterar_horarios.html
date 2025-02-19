@@ -6,7 +6,7 @@
         <ul class="horarios-list">
             {% for horario in todos_horarios %}
             <li class="form-group">
-            {% if horario in medico.horarios %}
+            {% if horario in medico_horarios %}
                 <input type="checkbox" name="alterar_horarios" id="{{horario}}" value="{{horario}}" checked>
             
             {% else %}

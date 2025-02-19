@@ -8,7 +8,7 @@
         <h3>Especialização {{medico.especializacao}}</h3>
         <h3>Horários:
             {% for horario in medico.horarios %}
-            ({{horario}})
+            {{horario.horario}} 
             {% endfor %}
         </h3>
         {% if medico.atende_plantao %}

@@ -276,9 +276,17 @@ def obterClassePaciente(id_paciente):
 def obterClasseMedico(id_medico):
     conn = db.connection()
     cursor = conn.cursor()
-    query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id_usuario = P.Id_medico AND P.Id_medico = %s')
-    cursor.execute(query_busca, id_medico)
-    id, nome, senha, email, id_prov, especializacao, horarios, avaliacao, atende_plantao = cursor.fetchone()
+    query_busca = ('SELECT * FROM USUARIO U INNER JOIN MEDICO M ON U.Id = M.Id WHERE M.Id = %s')
+    cursor.execute(query_busca, (id_medico,))
+    id, nome, senha, email, id_prov, especializacao, avaliacao, atende_plantao = cursor.fetchone()
+    cursor.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM horarios WHERE id_medico=%s', (id_medico,))
+    horarios = []
+    for h in cursor.fetchall():
+        horario = Horario(id_medico, h[1])
+        horarios.append(horario)
+    cursor.close()
     return Medico(id, nome, senha, email, especializacao, horarios, avaliacao, atende_plantao)
 
 def obter_medicamentos(q):
